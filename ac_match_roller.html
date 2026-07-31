@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Match Roller — Assassin's Creed RPG</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#0a1120;
+  --bg-panel:#111b30;
+  --bg-panel-2:#16223c;
+  --line: rgba(94,234,212,0.16);
+  --accent:#5eead4;
+  --accent-dim: rgba(94,234,212,0.35);
+  --amber:#f2a65a;
+  --danger:#e0654f;
+  --success:#3ecf8e;
+  --violet:#9b8cf2;
+  --c-abstergo:#d1483f;
+  --c-dinamico:#a13fd1;
+  --c-furtivo:#5b6ee8;
+  --c-astuto:#e08a2e;
+  --c-sociale:#8a9a4e;
+  --c-credo:#c9a63f;
+  --text:#e7edf5;
+  --text-dim:#8c9bb5;
+  --font-display:'Rajdhani', sans-serif;
+  --font-body:'Inter', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(94,234,212,0.07), transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(94,234,212,0.05), transparent 45%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  min-height:100vh;
+  padding:18px 14px 60px;
+}
+
+.wrap{max-width:480px;margin:0 auto;}
+
+header{text-align:center;padding:6px 0 4px;}
+header .eyebrow{
+  font-family:var(--font-display);
+  letter-spacing:.35em;
+  font-size:11px;
+  color:var(--accent);
+  text-transform:uppercase;
+  opacity:.85;
+}
+header h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:30px;
+  letter-spacing:.03em;
+  margin:4px 0 2px;
+}
+header p{
+  font-size:12.5px;
+  color:var(--text-dim);
+  margin:0;
+}
+
+.card{
+  background:var(--bg-panel);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--accent), transparent 70%);
+  opacity:.6;
+}
+
+.field-label{
+  font-family:var(--font-display);
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:8px;
+  display:block;
+}
+.field-label small{
+  font-family:var(--font-body);
+  text-transform:none;
+  letter-spacing:0;
+  color:var(--text-dim);
+  opacity:.8;
+  font-size:10.5px;
+  display:block;
+  margin-top:2px;
+}
+
+input[type=text]{
+  width:100%;
+  background:var(--bg-panel-2);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;
+  padding:10px 12px;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:15px;
+}
+input[type=text]:focus{outline:none; border-color:var(--accent-dim);}
+
+/* ---- character tabs ---- */
+.char-tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  margin-bottom:6px;
+}
+.char-tabs::-webkit-scrollbar{height:0;}
+.char-chip{
+  flex:0 0 auto;
+  display:flex; align-items:center; gap:6px;
+  background:var(--bg-panel-2);
+  border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:8px 14px;
+  font-family:var(--font-display);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  color:var(--text-dim);
+}
+.char-chip.active{
+  border-color:var(--accent);
+  color:var(--text);
+  background:rgba(94,234,212,0.08);
+}
+.char-chip .type-dot{width:7px;height:7px;border-radius:50%;}
+.char-chip .type-dot.discendente{background:var(--accent);}
+.char-chip .type-dot.antenato{background:var(--violet);}
+.char-chip.add{color:var(--accent); border-style:dashed;}
+
+.char-detail-row{
+  display:flex; gap:10px; margin-top:12px;
+}
+.type-toggle{
+  display:flex; gap:8px; flex:1;
+}
+.type-btn{
+  flex:1; text-align:center;
+  padding:9px 4px;
+  border-radius:8px;
+  border:1.5px solid rgba(255,255,255,0.08);
+  background:var(--bg-panel-2);
+  font-family:var(--font-display);
+  font-size:12.5px;
+  color:var(--text-dim);
+  cursor:pointer;
+}
+.type-btn.active.discendente{border-color:var(--accent); color:var(--accent); background:rgba(94,234,212,0.08);}
+.type-btn.active.antenato{border-color:var(--violet); color:var(--violet); background:rgba(155,140,242,0.1);}
+
+.delete-char{
+  font-size:11px;
+  color:var(--danger);
+  text-decoration:underline;
+  cursor:pointer;
+  background:none;
+  border:none;
+  margin-top:10px;
+  padding:0;
+}
+
+.stepper-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  margin-top:10px;
+}
+.stepper-row .txt{font-size:12.5px; color:var(--text-dim); flex:1;}
+.mini-stepper{display:flex; align-items:center; gap:10px;}
+.mini-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.12);
+  background:var(--bg-panel-2);
+  color:var(--accent);
+  font-family:var(--font-display);
+  font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+.mini-value{font-family:var(--font-display); font-size:17px; font-weight:700; min-width:20px; text-align:center;}
+
+.extra-dice-bar{
+  display:flex; gap:5px; margin-top:8px;
+}
+.extra-pip{
+  flex:1; height:8px; border-radius:4px;
+  background:var(--bg-panel-2);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.extra-pip.filled{background:var(--amber); border-color:var(--amber);}
+.sequence-btn{
+  margin-top:10px;
+  width:100%;
+  background:none;
+  border:1px dashed rgba(255,255,255,0.15);
+  color:var(--text-dim);
+  border-radius:8px;
+  padding:8px;
+  font-size:12px;
+  font-family:var(--font-display);
+  letter-spacing:.04em;
+  cursor:pointer;
+}
+.sequence-btn:active{border-color:var(--accent-dim); color:var(--accent);}
+
+.approach-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.approach-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  background:var(--bg-panel-2);
+  border:1.5px solid rgba(255,255,255,0.07);
+  border-radius:12px;
+  padding:12px 6px 10px;
+  cursor:pointer;
+  transition:border-color .15s, transform .1s;
+  color:var(--text);
+  position:relative;
+}
+.approach-btn svg{width:26px;height:26px;}
+.approach-btn .name{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:13.5px;
+  letter-spacing:.02em;
+}
+.approach-btn.active{
+  border-color:var(--accent);
+  background:rgba(94,234,212,0.08);
+}
+.approach-btn:active{transform:scale(0.97);}
+.approach-btn.intralciato::after{
+  content:'INTRALCIATO';
+  position:absolute; top:4px; right:4px;
+  font-size:7.5px;
+  font-family:var(--font-display);
+  letter-spacing:.04em;
+  color:var(--danger);
+  background:rgba(224,101,79,0.15);
+  padding:1px 4px;
+  border-radius:4px;
+}
+
+.rank-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  margin-top:14px;
+}
+.rank-btn{
+  width:38px;height:38px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.12);
+  background:var(--bg-panel-2);
+  color:var(--accent);
+  font-size:20px;
+  font-family:var(--font-display);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+.rank-btn:active{background:rgba(94,234,212,0.15);}
+.rank-value{
+  font-family:var(--font-display);
+  font-size:34px;
+  font-weight:700;
+  min-width:46px;
+  text-align:center;
+}
+.rank-caption{
+  text-align:center;
+  font-size:11.5px;
+  color:var(--text-dim);
+  margin-top:6px;
+}
+
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.toggle-row + .toggle-row{margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.05);}
+.toggle-row .txt{font-size:13px;color:var(--text-dim); line-height:1.4;}
+.switch{
+  position:relative;width:46px;height:26px;flex:0 0 auto;
+}
+.switch input{opacity:0;width:0;height:0;position:absolute;}
+.switch .track{
+  position:absolute;inset:0;
+  background:var(--bg-panel-2);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;
+  transition:.15s;
+}
+.switch .thumb{
+  position:absolute; top:2px; left:2px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--text-dim);
+  transition:.15s;
+}
+.switch input:checked + .track{border-color:var(--accent-dim); background:rgba(94,234,212,0.12);}
+.switch input:checked + .track .thumb{transform:translateX(20px); background:var(--accent);}
+
+.roll-btn{
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  font-family:var(--font-display);
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  background:linear-gradient(135deg, var(--accent), #34b8a4);
+  color:#04211d;
+  cursor:pointer;
+}
+.roll-btn:active{transform:scale(0.985);}
+.roll-btn:disabled{opacity:.4; cursor:default;}
+
+.dice-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:6px;
+  margin:6px 0 6px;
+}
+.dice-row.extra{margin-top:2px;}
+.dice-divider{
+  font-size:10px;
+  color:var(--text-dim);
+  text-align:center;
+  letter-spacing:.1em;
+  margin:8px 0 6px;
+  font-family:var(--font-display);
+}
+.die{
+  aspect-ratio:1;
+  background:var(--bg-panel-2);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,0.08);
+  animation:pop .25s ease;
+}
+.die svg{width:60%;height:60%;}
+@keyframes pop{
+  0%{transform:scale(0.5) rotate(-8deg); opacity:0;}
+  100%{transform:scale(1) rotate(0); opacity:1;}
+}
+.die.matched{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent) inset;}
+.die.creed-used{border-color:var(--amber); box-shadow:0 0 0 1px var(--amber) inset;}
+
+.result-banner{
+  text-align:center;
+  border-radius:10px;
+  padding:12px;
+  margin:8px 0 10px;
+  font-family:var(--font-display);
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.05em;
+}
+.result-banner.success{background:rgba(62,207,142,0.12); color:var(--success); border:1px solid rgba(62,207,142,0.3);}
+.result-banner.fail{background:rgba(224,101,79,0.12); color:var(--danger); border:1px solid rgba(224,101,79,0.3);}
+.result-banner.esausto{background:rgba(224,101,79,0.22); color:#ffb3a1; border:1px solid var(--danger);}
+
+.stat-row{
+  display:flex;
+  justify-content:space-around;
+  text-align:center;
+  margin-bottom:4px;
+  flex-wrap:wrap;
+  gap:6px 0;
+}
+.stat{flex:1; min-width:22%;}
+.stat .num{font-family:var(--font-display); font-size:22px; font-weight:700;}
+.stat .lbl{font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em;}
+.stat.momentum .num{color:var(--violet);}
+
+.note{
+  font-size:12px;
+  text-align:center;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed rgba(255,255,255,0.08);
+}
+.note.amber{color:var(--amber);}
+.note.violet{color:var(--violet);}
+.note.danger{color:var(--danger); font-weight:600;}
+
+.extra-dice-panel{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.extra-dice-panel .row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.spend-btn{
+  background:rgba(242,166,90,0.14);
+  border:1px solid var(--amber);
+  color:var(--amber);
+  border-radius:8px;
+  padding:8px 14px;
+  font-family:var(--font-display);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+.spend-btn:disabled{opacity:.35; cursor:default;}
+
+.confirm-btn{
+  width:100%;
+  margin-top:12px;
+  background:var(--bg-panel-2);
+  border:1px solid var(--accent-dim);
+  color:var(--accent);
+  border-radius:10px;
+  padding:11px;
+  font-family:var(--font-display);
+  font-size:14px;
+  letter-spacing:.05em;
+  cursor:pointer;
+}
+
+.snag-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.snag-chip{
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  font-size:11px;
+  font-family:var(--font-display);
+  padding:7px 2px;
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:var(--bg-panel-2);
+  color:var(--text-dim);
+  cursor:pointer;
+}
+.snag-chip.on{
+  border-color:var(--danger);
+  color:var(--danger);
+  background:rgba(224,101,79,0.1);
+}
+.snag-chip svg{width:13px;height:13px;}
+
+.log{
+  max-height:260px;
+  overflow-y:auto;
+}
+.log-entry{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.log-entry:last-child{border-bottom:none;}
+.log-entry .icon-wrap{
+  width:30px;height:30px;flex:0 0 auto;
+  border-radius:7px;
+  background:var(--bg-panel-2);
+  display:flex;align-items:center;justify-content:center;
+}
+.log-entry .icon-wrap svg{width:16px;height:16px;}
+.log-entry .info{flex:1; min-width:0;}
+.log-entry .info .top{font-size:13px; font-weight:600;}
+.log-entry .info .sub{font-size:11px; color:var(--text-dim);}
+.log-entry .badge{
+  font-family:var(--font-display);
+  font-size:11px;
+  font-weight:700;
+  padding:3px 9px;
+  border-radius:20px;
+  letter-spacing:.03em;
+  white-space:nowrap;
+}
+.log-entry .badge.success{background:rgba(62,207,142,0.15); color:var(--success);}
+.log-entry .badge.fail{background:rgba(224,101,79,0.15); color:var(--danger);}
+.empty-log{
+  text-align:center; color:var(--text-dim); font-size:12.5px; padding:20px 0;
+}
+/* ---- view tabs ---- */
+.view-tabs{display:flex; gap:8px; margin-bottom:14px;}
+.view-tab{
+  flex:1; background:var(--bg-panel); border:1px solid rgba(255,255,255,0.08); color:var(--text-dim);
+  font-family:var(--font-display); font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+  padding:10px; border-radius:10px; cursor:pointer;
+}
+.view-tab.active{color:var(--accent); border-color:var(--accent-dim); background:rgba(94,234,212,0.08);}
+
+.skill-summary{display:flex; flex-direction:column; gap:6px; margin-bottom:10px;}
+.skill-summary-chip{
+  display:flex; align-items:center; gap:8px; background:var(--bg-panel-2);
+  border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:8px 10px; font-size:13px;
+}
+.skill-summary-chip .dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+.skill-summary-chip.empty{color:var(--text-dim); font-style:italic; border-style:dashed;}
+.manage-skills-btn{
+  width:100%; background:none; border:1px solid var(--accent-dim); color:var(--accent);
+  border-radius:8px; padding:9px; font-family:var(--font-body); font-size:12.5px; font-weight:600; cursor:pointer;
+}
+.skill-group-title{
+  font-family:var(--font-display); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--text-dim); margin:14px 0 6px; padding-left:2px;
+}
+.skill-group-title:first-child{margin-top:0;}
+.skill-slot.locked{opacity:.5; border-style:dashed;}
+
+/* ---- abilita ---- */
+.skill-slots{display:flex; flex-direction:column; gap:8px; margin-bottom:12px;}
+.skill-slot{
+  display:flex; align-items:flex-start; gap:10px;
+  background:var(--bg-panel-2); border:1px solid rgba(255,255,255,0.07); border-radius:10px;
+  padding:10px 12px;
+}
+.skill-slot.empty{
+  border-style:dashed; align-items:center; color:var(--text-dim); font-size:12.5px;
+}
+.skill-slot .body{flex:1; min-width:0;}
+.skill-slot .name-row{display:flex; align-items:center; gap:8px; margin-bottom:2px;}
+.skill-slot .name{font-family:var(--font-display); font-weight:600; font-size:14.5px;}
+.skill-slot .tag{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.06em;
+  padding:2px 6px; border-radius:5px; color:var(--bg); font-weight:700;
+}
+.skill-slot .desc{font-size:12px; color:var(--text-dim); line-height:1.45;}
+.skill-remove{
+  background:none; border:1px solid rgba(224,101,79,0.4); color:var(--danger);
+  border-radius:7px; padding:5px 9px; font-size:11px; font-family:var(--font-body);
+  cursor:pointer; flex-shrink:0;
+}
+.skill-remove:active{background:rgba(224,101,79,0.12);}
+.skill-count{font-size:11px; color:var(--text-dim); margin-bottom:10px;}
+.skill-count b{color:var(--accent);}
+.skill-search-wrap{position:relative; margin-bottom:10px;}
+.skill-list{max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;}
+.skill-item{
+  background:var(--bg-panel-2); border:1px solid rgba(255,255,255,0.06); border-radius:9px;
+  overflow:hidden;
+}
+.skill-item .head{
+  display:flex; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; min-height:20px;
+}
+.skill-item .head .name{flex:1; font-size:15px; font-weight:600; color:var(--text); line-height:1.3;}
+.skill-item .head .tag{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; flex-shrink:0;
+  padding:3px 7px; border-radius:5px; color:var(--bg); font-weight:700; line-height:1.4;
+}
+.skill-item .head .chev{color:var(--text-dim); font-size:11px; transition:transform .15s; flex-shrink:0;}
+.skill-item.open .head .chev{transform:rotate(180deg);}
+.skill-item .panel{display:none; padding:0 12px 12px;}
+.skill-item.open .panel{display:block;}
+.skill-item .panel .desc{font-size:12.5px; color:var(--text-dim); line-height:1.5; margin-bottom:10px;}
+.skill-add-btn{
+  width:100%; background:rgba(94,234,212,0.1); border:1px solid var(--accent-dim);
+  color:var(--accent); border-radius:8px; padding:8px; font-family:var(--font-body);
+  font-size:12.5px; font-weight:600; cursor:pointer;
+}
+.skill-add-btn:disabled{opacity:.35; cursor:default; color:var(--text-dim); border-color:rgba(255,255,255,0.08); background:none;}
+.skill-added-note{font-size:12px; color:var(--success); text-align:center; padding:8px;}
+.skill-empty-search{font-size:12.5px; color:var(--text-dim); text-align:center; padding:14px 0;}
+
+.clear-btn{
+  display:block; margin:12px auto 0;
+  background:none; border:none;
+  color:var(--text-dim);
+  font-size:12px;
+  text-decoration:underline;
+  cursor:pointer;
+}
+footer{
+  text-align:center;
+  font-size:10.5px;
+  color:var(--text-dim);
+  opacity:.6;
+  margin-top:20px;
+  line-height:1.6;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Match System · Fan Tool</div>
+    <h1>MATCH ROLLER</h1>
+    <p>Tiro dadi non ufficiale per Assassin's Creed®: Il Gioco di Ruolo</p>
+  </header>
+
+  <div class="view-tabs">
+    <button class="view-tab active" id="tabScheda">Scheda</button>
+    <button class="view-tab" id="tabAbilita">Abilità</button>
+  </div>
+
+  <div id="viewScheda">
+
+  <div class="card">
+    <span class="field-label">Personaggi<small>Ogni scheda qui sotto è un personaggio a sé, con nome e dati propri. Per avere sia il Discendente che l'Antenato, crea due schede separate con "+ Nuovo": il pulsante Tipo più in basso cambia solo l'etichetta della scheda aperta, non ne crea una seconda.</small></span>
+    <div class="char-tabs" id="charTabs"></div>
+
+    <input type="text" id="charName" placeholder="Nome del personaggio">
+
+    <div class="char-detail-row">
+      <div class="type-toggle" id="typeToggle"></div>
+    </div>
+    <div class="rank-caption" style="margin-top:6px;">Etichetta solo di questa scheda — non crea un secondo personaggio</div>
+
+    <div class="stepper-row">
+      <div class="txt">Dadi Extra totali <small>guadagnati salendo di livello di Sincronizzazione/Osmosi</small></div>
+      <div class="mini-stepper">
+        <div class="mini-btn" id="extraMaxMinus">–</div>
+        <div class="mini-value" id="extraMaxValue">0</div>
+        <div class="mini-btn" id="extraMaxPlus">+</div>
+      </div>
+    </div>
+    <div class="extra-dice-bar" id="extraBar"></div>
+    <button class="sequence-btn" id="newSequenceBtn">↻ Nuova Sequenza (ricarica Dadi Extra)</button>
+
+    <button class="delete-char" id="deleteCharBtn">Elimina questo personaggio</button>
+  </div>
+
+  <div class="card">
+    <span class="field-label">Abilità</span>
+    <div class="skill-summary" id="skillSummary"></div>
+    <button class="manage-skills-btn" id="manageSkillsBtn">Gestisci abilità →</button>
+  </div>
+
+  <div class="card">
+    <span class="field-label">Approccio</span>
+    <div class="approach-grid" id="approachGrid"></div>
+
+    <div class="rank-row">
+      <div class="rank-btn" id="rankMinus">–</div>
+      <div class="rank-value" id="rankValue">2</div>
+      <div class="rank-btn" id="rankPlus">+</div>
+    </div>
+    <div class="rank-caption">Difficoltà d'Approccio (match richiesti)</div>
+  </div>
+
+  <div class="card">
+    <div class="toggle-row">
+      <div class="txt"><b>Prova di Reazione</b><br>rischia sempre una Complicazione con 1+ Abstergo, anche se l'Approccio non è Intralciato</div>
+      <label class="switch">
+        <input type="checkbox" id="reactionToggle">
+        <span class="track"><span class="thumb"></span></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <div class="txt">Descrittori attivi (Tratti/Equip.)<br>ogni Descrittore conta 1 simbolo Credo come match</div>
+      <div class="mini-stepper">
+        <div class="mini-btn" id="descMinus">–</div>
+        <div class="mini-value" id="descValue">0</div>
+        <div class="mini-btn" id="descPlus">+</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="roll-btn" id="rollBtn">Tira i 6 dadi</button>
+
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="dice-row" id="diceRow"></div>
+    <div class="dice-divider" id="extraDivider" style="display:none;">Dadi Extra</div>
+    <div class="dice-row extra" id="extraDiceRow"></div>
+
+    <div class="result-banner" id="resultBanner"></div>
+    <div class="stat-row">
+      <div class="stat"><div class="num" id="statMatch">0</div><div class="lbl">Match</div></div>
+      <div class="stat"><div class="num" id="statAbstergo">0</div><div class="lbl">Abstergo</div></div>
+      <div class="stat"><div class="num" id="statCredo">0</div><div class="lbl">Credo</div></div>
+      <div class="stat momentum"><div class="num" id="statSlancio">0</div><div class="lbl">Slancio</div></div>
+    </div>
+    <div class="note danger" id="complicationNote" style="display:none;"></div>
+    <div class="note amber" id="intralcioNote" style="display:none;"></div>
+
+    <div class="extra-dice-panel" id="extraDicePanel" style="display:none;">
+      <div class="row">
+        <div class="txt" style="font-size:12.5px; color:var(--text-dim);">Spendi Dadi Extra disponibili</div>
+        <div class="mini-stepper">
+          <div class="mini-btn" id="spendMinus">–</div>
+          <div class="mini-value" id="spendValue">0</div>
+          <div class="mini-btn" id="spendPlus">+</div>
+        </div>
+      </div>
+      <button class="spend-btn" id="spendBtn" style="width:100%; margin-top:10px;">Tira i Dadi Extra</button>
+    </div>
+
+    <button class="confirm-btn" id="confirmBtn">Conferma e salva nel registro</button>
+  </div>
+
+  <div class="card">
+    <span class="field-label">Approcci in Intralcio <small>tocca per segnare/rimuovere manualmente</small></span>
+    <div class="snag-grid" id="snagGrid"></div>
+  </div>
+
+  <div class="card">
+    <span class="field-label">Cronologia</span>
+    <div class="log" id="logList"></div>
+    <div class="empty-log" id="emptyLog">Nessun tiro ancora effettuato.</div>
+    <button class="clear-btn" id="clearLog">Svuota cronologia di questo personaggio</button>
+  </div>
+
+  </div><!-- /viewScheda -->
+
+  <div id="viewAbilita" style="display:none;">
+    <div class="card">
+      <span class="field-label">Abilità<small>Le abilità si sbloccano salendo di livello di Sincronizzazione/Osmosi. Se il livello scende, le abilità in eccesso vengono rimosse automaticamente.</small></span>
+      <div class="skill-count" id="skillCount"></div>
+      <div class="skill-slots" id="skillSlots"></div>
+
+      <div class="skill-search-wrap">
+        <input type="text" id="skillSearch" placeholder="Cerca un'abilità...">
+      </div>
+      <div class="skill-list" id="skillList"></div>
+    </div>
+  </div>
+
+  <footer>
+    Strumento creato da un fan, non affiliato né approvato da Ubisoft, CMON o Two Little Mice.<br>
+    Assassin's Creed© è un marchio registrato dei rispettivi proprietari.
+  </footer>
+</div>
+
+<script>
+// ---------- Icons (original geometric designs, not reproducing official artwork) ----------
+const ICONS = {
+  dinamico: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-dinamico)"/><g transform="translate(1.7384,1.7384) scale(0.040084)"><path d="M329.8 235.69l62.83-82.71 42.86 32.56-62.83 82.75zm-12.86-9.53l66.81-88-45-34.15-66.81 88zm-27.48-97.78l-19.3 39.57 57-75-42.51-32.3-36.24 47.71zm-20.74-73.24l-46.64-35.43-42 55.31 53.67 26.17zm107 235.52l-139-102.71-9.92.91 4.56 2 62.16 138.43-16.52 2.25-57.68-128.5-40-17.7-4-30.84 39.41 19.42 36.36-3.33 17-34.83-110.9-54.09-80.68 112.51L177.6 346.67l-22.7 145.62H341V372.62l35.29-48.93L387 275.77z" fill="#ffffff"/></g></svg>`,
+  furtivo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-furtivo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><ellipse cx="12" cy="12.5" rx="7.5" ry="9" fill="#ffffff"/><path d="M4.8 11.2c0-1.6 1.3-2.7 2.8-2.3 1.7.4 2.9 1.4 3.6 2.3h1.6c.7-.9 1.9-1.9 3.6-2.3 1.5-.4 2.8.7 2.8 2.3v1.1c0 1.7-1.4 3.1-3.2 3.1-1.6 0-3-.9-3.6-2.2-.2-.4-.8-.4-1 0-.6 1.3-2 2.2-3.6 2.2-1.8 0-3.2-1.4-3.2-3.1v-1.1z" fill="var(--c-furtivo)"/><ellipse cx="8.9" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(-18 8.9 11.9)"/><ellipse cx="15.1" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(18 15.1 11.9)"/></g></svg>`,
+  astuto: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-astuto)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M3 12 Q12 0 21 12 Q12 24 3 12 Z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.3" fill="#ffffff"/></g></svg>`,
+  sociale: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-sociale)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M4 5h11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#ffffff" opacity="0.6"/><path d="M11 10h9a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1v3l-4-3h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z" fill="#ffffff"/></g></svg>`,
+  abstergo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-abstergo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><line x1="6.00" y1="17.00" x2="13.68" y2="3.70" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="12.00" y1="6.61" x2="19.68" y2="19.91" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="18.00" y1="17.00" x2="2.64" y2="17.00" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></g></svg>`,
+  credo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-credo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><circle cx="12" cy="4.4" r="1.5" fill="none" stroke="#ffffff" stroke-width="1.4"/><line x1="12" y1="5.8" x2="5.2" y2="19.5" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/><line x1="12" y1="5.8" x2="18.8" y2="19.5" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/><line x1="12" y1="19.6" x2="6.4" y2="14.0" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/><line x1="12" y1="19.6" x2="17.6" y2="14.0" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/></g></svg>`
+};
+
+const APPROACHES = [
+  {key:'dinamico', label:'Dinamico'},
+  {key:'furtivo', label:'Furtivo'},
+  {key:'astuto', label:'Astuto'},
+  {key:'sociale', label:'Sociale'}
+];
+
+// d6 face -> simbolo, secondo la tabella di conversione ufficiale per dadi standard
+const FACE_MAP = {1:'abstergo', 2:'dinamico', 3:'furtivo', 4:'astuto', 5:'sociale', 6:'credo'};
+
+const SKILLS = [
+  {key:'allerta', name:'Allerta', approach:null, text:'Quando affronti una Prova di Reazione, puoi ritirare fino a 2 risultati Abstergo.'},
+  {key:'compagno_animale', name:'Compagno Animale', approach:null, text:'La tua volontà e quella del tuo animale diventano una sola cosa: vedi attraverso i suoi occhi e ne comandi i movimenti. Può aiutarti in combattimento o fare da diversivo. Inoltre, in una prova di Dinamico o Furtivo, puoi tirare 1 risultato Abstergo aggiuntivo.'},
+  {key:'persuasione_forzata', name:'Persuasione Forzata', approach:'sociale', text:'In una prova di Sociale per intimidire, considera fino a 2 risultati Dinamico come 1 match aggiuntivo ciascuno.'},
+  {key:'assassinio', name:'Assassinio', approach:'furtivo', text:'In una prova di Furtivo per un assassinio, considera fino a 2 risultati Astuto come 1 match aggiuntivo ciascuno.'},
+  {key:'addestramento_confraternita', name:'Addestramento della Confraternita', approach:null, text:'Usando un\'arma nascosta, considera 1 risultato Credo come 1 match aggiuntivo, in aggiunta a quello dell\'Equipaggiamento Distintivo.'},
+  {key:'seduttore', name:'Seduttore', approach:'sociale', text:'In una prova di Sociale per sedurre, aggiungi 1 match. Inoltre puoi usare 2 risultati Astuto per ottenere un\'informazione extra dalla Scena.'},
+  {key:'astuzia', name:'Astuzia', approach:'astuto', text:'In una prova di Astuto durante un\'attività di manomissione, hai 1 Slancio Gratuito.'},
+  {key:'movimenti_ingannevoli', name:'Movimenti Ingannevoli', approach:'dinamico', text:'In una prova di Dinamico per ingannare, considera fino a 2 risultati Sociale come 1 match aggiuntivo ciascuno.'},
+  {key:'senso_aquila', name:'Senso dell\'Aquila', approach:null, text:'Percepisci il battito cardiaco dei bersagli nell\'area o ne prevedi la prossima mossa; puoi leggerne i ricordi dopo averli uccisi.'},
+  {key:'occhio_aquila', name:'Occhio dell\'Aquila', approach:null, text:'Individui alleati, nemici, obiettivi e informazioni a breve raggio. In una prova di Approccio, conta 1 risultato Astuto come 1 match aggiuntivo.'},
+  {key:'corsa_libera', name:'Corsa Libera', approach:'dinamico', text:'In parkour, aggiungi 1 match a una prova di Dinamico correlata. Puoi usare 2 risultati Furtivo per sparire dalla vista.'},
+  {key:'grinta', name:'Grinta', approach:'astuto', text:'In una prova di Astuto, considera fino a 1 risultato Dinamico come 1 match aggiuntivo.'},
+  {key:'nascondersi_vista', name:'Nascondersi alla Vista', approach:'furtivo', text:'In una prova di Furtivo, considera fino a 1 risultato Sociale come 1 match aggiuntivo.'},
+  {key:'ipnotico', name:'Ipnotico', approach:'sociale', text:'In una prova di Sociale, considera fino a 1 risultato Furtivo come 1 match aggiuntivo.'},
+  {key:'combattente_nato', name:'Combattente Nato', approach:'dinamico', text:'In una prova di Dinamico in combattimento, hai 1 Slancio Gratuito.'},
+  {key:'agile', name:'Agile', approach:'furtivo', text:'In una prova di Furtivo durante un\'infiltrazione, hai 1 Slancio Gratuito.'},
+  {key:'perspicace', name:'Perspicace', approach:'astuto', text:'In una prova di Astuto per investigare, considera fino a 2 risultati Furtivo come 1 match aggiuntivo ciascuno.'},
+  {key:'faccia_poker', name:'Faccia da Poker', approach:'sociale', text:'In una prova di Sociale in una situazione ingannevole, hai 1 Slancio Gratuito.'},
+  {key:'artificiere', name:'Artificiere', approach:'astuto', text:'Sabotando un dispositivo, aggiungi 1 match a una prova di Astuto correlata. Puoi usare 2 risultati Astuto per creare un diversivo nella Scena.'},
+  {key:'gioco_mano', name:'Gioco di Mano', approach:'furtivo', text:'Rubando o nascondendo un piccolo oggetto, aggiungi 1 match a una prova di Furtivo correlata. Puoi usare 2 risultati Furtivo per rubare un oggetto dalla Scena.'},
+  {key:'mosse_strategiche', name:'Mosse Strategiche', approach:'dinamico', text:'In una prova di Dinamico, considera fino a 1 risultato Astuto come 1 match aggiuntivo.'}
+];
+const MAX_SKILLS = 3;
+let openSkillKey = null;
+let skillSearchTerm = '';
+
+const STORAGE_KEY = 'ac_match_roller_v2';
+
+function newCharacter(name, type){
+  return {
+    id: 'c' + Date.now() + Math.floor(Math.random()*1000),
+    name: name || (type === 'antenato' ? 'Nuovo Antenato' : 'Nuovo Discendente'),
+    type: type || 'discendente',
+    extraDiceMax: 0,
+    extraDiceAvailable: 0,
+    intralci: {dinamico:false, furtivo:false, astuto:false, sociale:false},
+    esausto: false,
+    skills: [],
+    lastApproach: 'dinamico',
+    lastDifficulty: 2,
+    log: []
+  };
+}
+
+let state = {
+  characters: [newCharacter('Discendente', 'discendente')],
+  activeId: null,
+  reactionCheck: false,
+  descrittoriAttivi: 0
+};
+state.activeId = state.characters[0].id;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && parsed.characters && parsed.characters.length){
+        state = parsed;
+        state.characters.forEach(c=>{ if(!Array.isArray(c.skills)) c.skills = []; });
+      }
+    }
+  }catch(e){ /* usa default */ }
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function activeChar(){
+  return state.characters.find(c=>c.id === state.activeId) || state.characters[0];
+}
+
+// pending roll (not yet committed to the log)
+let pending = null;
+
+function renderCharTabs(){
+  const tabs = document.getElementById('charTabs');
+  tabs.innerHTML = '';
+  state.characters.forEach(c=>{
+    const chip = document.createElement('div');
+    chip.className = 'char-chip' + (c.id === state.activeId ? ' active':'');
+    chip.innerHTML = `<span class="type-dot ${c.type}"></span>${c.name}`;
+    chip.onclick = ()=>{ state.activeId = c.id; pending=null; saveState(); renderAll(); };
+    tabs.appendChild(chip);
+  });
+  const addChip = document.createElement('div');
+  addChip.className = 'char-chip add';
+  addChip.textContent = '+ Nuovo personaggio';
+  addChip.onclick = ()=>{
+    const c = newCharacter();
+    state.characters.push(c);
+    state.activeId = c.id;
+    pending = null;
+    saveState();
+    renderAll();
+  };
+  tabs.appendChild(addChip);
+}
+
+function renderCharDetail(){
+  const c = activeChar();
+  document.getElementById('charName').value = c.name;
+
+  const typeToggle = document.getElementById('typeToggle');
+  typeToggle.innerHTML = '';
+  [['discendente','Discendente'],['antenato','Antenato']].forEach(([key,label])=>{
+    const btn = document.createElement('div');
+    btn.className = 'type-btn' + (c.type===key ? ' active '+key : '');
+    btn.textContent = label;
+    btn.onclick = ()=>{ c.type = key; saveState(); renderAll(); };
+    typeToggle.appendChild(btn);
+  });
+
+  document.getElementById('extraMaxValue').textContent = c.extraDiceMax;
+  const bar = document.getElementById('extraBar');
+  bar.innerHTML = '';
+  for(let i=0;i<6;i++){
+    const pip = document.createElement('div');
+    pip.className = 'extra-pip' + (i < c.extraDiceAvailable ? ' filled':'');
+    bar.appendChild(pip);
+  }
+
+  document.getElementById('deleteCharBtn').style.display = state.characters.length > 1 ? 'block':'none';
+}
+
+document.getElementById('charName').addEventListener('input', (e)=>{
+  activeChar().name = e.target.value || 'Senza nome';
+  saveState();
+  renderCharTabs();
+});
+
+document.getElementById('extraMaxMinus').onclick = ()=>{
+  const c = activeChar();
+  c.extraDiceMax = Math.max(0, c.extraDiceMax - 1);
+  c.extraDiceAvailable = Math.min(c.extraDiceAvailable, c.extraDiceMax);
+  const unlocked = unlockedSkillSlots(c);
+  if(c.skills.length > unlocked) c.skills = c.skills.slice(0, unlocked);
+  saveState(); renderCharDetail(); renderSkills();
+};
+document.getElementById('extraMaxPlus').onclick = ()=>{
+  const c = activeChar();
+  if(c.extraDiceMax < 6){
+    c.extraDiceMax += 1;
+    c.extraDiceAvailable += 1; // guadagnare un livello dà subito un Dado Extra disponibile
+  }
+  saveState(); renderCharDetail(); renderSkills();
+};
+document.getElementById('newSequenceBtn').onclick = ()=>{
+  const c = activeChar();
+  c.extraDiceAvailable = c.extraDiceMax;
+  saveState(); renderCharDetail();
+};
+document.getElementById('deleteCharBtn').onclick = ()=>{
+  if(state.characters.length <= 1) return;
+  const idx = state.characters.findIndex(c=>c.id === state.activeId);
+  state.characters.splice(idx,1);
+  state.activeId = state.characters[0].id;
+  pending = null;
+  saveState();
+  renderAll();
+};
+
+function renderApproachGrid(){
+  const c = activeChar();
+  const grid = document.getElementById('approachGrid');
+  grid.innerHTML = '';
+  APPROACHES.forEach(a=>{
+    const btn = document.createElement('div');
+    btn.className = 'approach-btn'
+      + (c.lastApproach===a.key ? ' active':'')
+      + (c.intralci[a.key] ? ' intralciato':'');
+    btn.innerHTML = ICONS[a.key] + `<span class="name">${a.label}</span>`;
+    btn.onclick = ()=>{ c.lastApproach = a.key; saveState(); renderApproachGrid(); };
+    grid.appendChild(btn);
+  });
+}
+
+function renderRank(){
+  document.getElementById('rankValue').textContent = activeChar().lastDifficulty;
+}
+
+document.getElementById('rankMinus').onclick = ()=>{
+  const c = activeChar();
+  c.lastDifficulty = Math.max(1, c.lastDifficulty-1);
+  saveState(); renderRank();
+};
+document.getElementById('rankPlus').onclick = ()=>{
+  const c = activeChar();
+  c.lastDifficulty = Math.min(8, c.lastDifficulty+1);
+  saveState(); renderRank();
+};
+
+document.getElementById('reactionToggle').addEventListener('change', (e)=>{
+  state.reactionCheck = e.target.checked;
+  saveState();
+});
+document.getElementById('descMinus').onclick = ()=>{
+  state.descrittoriAttivi = Math.max(0, state.descrittoriAttivi - 1);
+  saveState(); document.getElementById('descValue').textContent = state.descrittoriAttivi;
+};
+document.getElementById('descPlus').onclick = ()=>{
+  state.descrittoriAttivi = Math.min(5, state.descrittoriAttivi + 1);
+  saveState(); document.getElementById('descValue').textContent = state.descrittoriAttivi;
+};
+
+const TERM_COLOR_VAR = {
+  'Dinamico':'--c-dinamico', 'Furtivo':'--c-furtivo', 'Astuto':'--c-astuto', 'Sociale':'--c-sociale',
+  'Abstergo':'--c-abstergo', 'Credo':'--c-credo'
+};
+function colorizeSkillText(text){
+  let out = text;
+  Object.keys(TERM_COLOR_VAR).forEach(word=>{
+    const re = new RegExp('\\b'+word+'\\b','g');
+    out = out.replace(re, `<span style="color:var(${TERM_COLOR_VAR[word]}); font-weight:600;">${word}</span>`);
+  });
+  return out;
+}
+
+// ---------- abilita ----------
+function approachColorVar(approach){
+  return approach ? `var(--c-${approach})` : 'var(--text-dim)';
+}
+function approachLabel(approach){
+  const found = APPROACHES.find(a=>a.key===approach);
+  return found ? found.label : 'Passiva';
+}
+// Slot di abilità sbloccati in base al livello di Sincronizzazione/Osmosi raggiunto
+// (nell'app ufficiale gli slot abilità si sbloccano a 25%, 55%, 85%: il 1°, 3° e 5° dei 6 livelli)
+function unlockedSkillSlots(c){
+  return Math.min(MAX_SKILLS, Math.ceil((c.extraDiceMax || 0) / 2));
+}
+
+function addSkill(key){
+  const c = activeChar();
+  if(c.skills.length >= unlockedSkillSlots(c)) return;
+  if(c.skills.includes(key)) return;
+  c.skills.push(key);
+  saveState();
+  renderSkills();
+}
+function removeSkill(key){
+  const c = activeChar();
+  c.skills = c.skills.filter(k=>k!==key);
+  saveState();
+  renderSkills();
+}
+
+function renderSkillSummary(){
+  const c = activeChar();
+  const el = document.getElementById('skillSummary');
+  if(!el) return;
+  el.innerHTML = '';
+  if(c.skills.length === 0){
+    el.innerHTML = '<div class="skill-summary-chip empty">Nessuna abilità selezionata</div>';
+    return;
+  }
+  c.skills.forEach(key=>{
+    const sk = SKILLS.find(s=>s.key===key);
+    const chip = document.createElement('div');
+    chip.className = 'skill-summary-chip';
+    chip.innerHTML = `<span class="dot" style="background:${approachColorVar(sk.approach)};"></span><span>${sk.name}</span>`;
+    el.appendChild(chip);
+  });
+}
+
+function renderSkills(){
+  const c = activeChar();
+  const unlocked = unlockedSkillSlots(c);
+
+  renderSkillSummary();
+
+  const countEl = document.getElementById('skillCount');
+  if(countEl) countEl.innerHTML = `<b>${c.skills.length}</b> / ${unlocked} slot sbloccati <span style="opacity:.6;">(massimo ${MAX_SKILLS} a Sincronizzazione 100%)</span>`;
+
+  // slot selezionati + slot bloccati/liberi
+  const slotsEl = document.getElementById('skillSlots');
+  if(slotsEl){
+    slotsEl.innerHTML = '';
+    for(let i=0; i<MAX_SKILLS; i++){
+      const key = c.skills[i];
+      if(key){
+        const sk = SKILLS.find(s=>s.key===key);
+        const slot = document.createElement('div');
+        slot.className = 'skill-slot';
+        slot.innerHTML = `
+          <div class="body">
+            <div class="name-row">
+              <span class="name">${sk.name}</span>
+              <span class="tag" style="background:${approachColorVar(sk.approach)};">${approachLabel(sk.approach)}</span>
+            </div>
+            <div class="desc">${colorizeSkillText(sk.text)}</div>
+          </div>
+          <button class="skill-remove">Rimuovi</button>
+        `;
+        slot.querySelector('.skill-remove').onclick = ()=> removeSkill(key);
+        slotsEl.appendChild(slot);
+      } else if(i < unlocked){
+        const slot = document.createElement('div');
+        slot.className = 'skill-slot empty';
+        slot.textContent = 'Slot libero';
+        slotsEl.appendChild(slot);
+      } else {
+        const slot = document.createElement('div');
+        slot.className = 'skill-slot empty locked';
+        slot.textContent = '🔒 Bloccato — sali di Sincronizzazione/Osmosi per sbloccarlo';
+        slotsEl.appendChild(slot);
+      }
+    }
+  }
+
+  // elenco ricercabile, raggruppato per Approccio
+  const listEl = document.getElementById('skillList');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  const term = skillSearchTerm.trim().toLowerCase();
+  const filtered = SKILLS.filter(s => s.name.toLowerCase().includes(term));
+  if(filtered.length === 0){
+    listEl.innerHTML = '<div class="skill-empty-search">Nessuna abilità trovata.</div>';
+    return;
+  }
+
+  const groupOrder = ['dinamico','furtivo','astuto','sociale', null];
+  groupOrder.forEach(groupKey=>{
+    const groupSkills = filtered.filter(s=>s.approach === groupKey);
+    if(groupSkills.length === 0) return;
+    const title = document.createElement('div');
+    title.className = 'skill-group-title';
+    title.textContent = groupKey ? approachLabel(groupKey) : 'Passive / altro';
+    listEl.appendChild(title);
+
+    groupSkills.forEach(sk=>{
+      const already = c.skills.includes(sk.key);
+      const full = c.skills.length >= unlocked;
+      const item = document.createElement('div');
+      item.className = 'skill-item' + (openSkillKey === sk.key ? ' open' : '');
+      item.innerHTML = `
+        <div class="head">
+          <span class="name">${sk.name}</span>
+          <span class="tag" style="background:${approachColorVar(sk.approach)};">${approachLabel(sk.approach)}</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="panel">
+          <div class="desc">${colorizeSkillText(sk.text)}</div>
+          ${already
+            ? '<div class="skill-added-note">✓ Già nella scheda</div>'
+            : `<button class="skill-add-btn" ${full ? 'disabled' : ''}>${full ? 'Slot sbloccati pieni' : '+ Aggiungi alla scheda'}</button>`
+          }
+        </div>
+      `;
+      item.querySelector('.head').onclick = ()=>{
+        openSkillKey = (openSkillKey === sk.key) ? null : sk.key;
+        renderSkills();
+      };
+      if(!already){
+        const btn = item.querySelector('.skill-add-btn');
+        if(btn) btn.onclick = (e)=>{ e.stopPropagation(); addSkill(sk.key); };
+      }
+      listEl.appendChild(item);
+    });
+  });
+}
+
+document.getElementById('skillSearch').addEventListener('input', (e)=>{
+  skillSearchTerm = e.target.value;
+  renderSkills();
+});
+
+function switchView(view){
+  document.getElementById('viewScheda').style.display = view === 'scheda' ? '' : 'none';
+  document.getElementById('viewAbilita').style.display = view === 'abilita' ? '' : 'none';
+  document.getElementById('tabScheda').classList.toggle('active', view === 'scheda');
+  document.getElementById('tabAbilita').classList.toggle('active', view === 'abilita');
+  if(view === 'abilita') window.scrollTo(0,0);
+}
+document.getElementById('tabScheda').onclick = ()=> switchView('scheda');
+document.getElementById('tabAbilita').onclick = ()=> switchView('abilita');
+document.getElementById('manageSkillsBtn').onclick = ()=> switchView('abilita');
+
+
+
+function renderSnagGrid(){
+  const c = activeChar();
+  const grid = document.getElementById('snagGrid');
+  grid.innerHTML = '';
+  APPROACHES.forEach(a=>{
+    const chip = document.createElement('div');
+    const on = c.intralci[a.key];
+    chip.className = 'snag-chip' + (on ? ' on':'');
+    chip.innerHTML = ICONS[a.key] + `<span>${a.label}</span>`;
+    chip.onclick = ()=>{
+      c.intralci[a.key] = !c.intralci[a.key];
+      if(!Object.values(c.intralci).every(Boolean)) c.esausto = false;
+      saveState(); renderSnagGrid(); renderApproachGrid();
+    };
+    grid.appendChild(chip);
+  });
+}
+
+function renderLog(){
+  const c = activeChar();
+  const list = document.getElementById('logList');
+  const empty = document.getElementById('emptyLog');
+  list.innerHTML = '';
+  if(!c.log || c.log.length === 0){
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  c.log.slice().reverse().forEach(entry=>{
+    const row = document.createElement('div');
+    row.className = 'log-entry';
+    const label = APPROACHES.find(a=>a.key===entry.approach)?.label || entry.approach;
+    let extras = [];
+    if(entry.momentum > 0) extras.push(entry.momentum + ' Slancio');
+    if(entry.complication) extras.push('Complicazione ' + entry.complication);
+    row.innerHTML = `
+      <div class="icon-wrap">${ICONS[entry.approach]}</div>
+      <div class="info">
+        <div class="top">${label} · difficoltà ${entry.difficulty}</div>
+        <div class="sub">${entry.match} match · ${entry.abstergo} Abstergo${entry.extraDiceUsed ? ' · +' + entry.extraDiceUsed + ' Dadi Extra':''}${extras.length ? ' · ' + extras.join(', '):''} · ${entry.time}</div>
+      </div>
+      <div class="badge ${entry.success ? 'success':'fail'}">${entry.success ? 'RIUSCITO':'FALLITO'}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('clearLog').onclick = ()=>{
+  activeChar().log = [];
+  saveState();
+  renderLog();
+};
+
+function rollOneDie(){ return Math.floor(Math.random()*6)+1; }
+
+function computeStats(faces, extraDescrittori){
+  const symbols = faces.map(f=>FACE_MAP[f]);
+  const approach = activeChar().lastApproach;
+  let matchCount = symbols.filter(s=>s===approach).length;
+  const abstergoCount = symbols.filter(s=>s==='abstergo').length;
+  const credoCount = symbols.filter(s=>s==='credo').length;
+  const credoUsed = Math.min(extraDescrittori, credoCount);
+  matchCount += credoUsed;
+  return {symbols, matchCount, abstergoCount, credoCount, credoUsed};
+}
+
+function renderDiceRow(elId, symbols, approach, creedUsedCount){
+  const row = document.getElementById(elId);
+  row.innerHTML = '';
+  let tagged = 0;
+  symbols.forEach(s=>{
+    const die = document.createElement('div');
+    let cls = 'die';
+    if(s === approach) cls += ' matched';
+    if(s === 'credo' && tagged < creedUsedCount){ cls += ' creed-used'; tagged++; }
+    die.className = cls;
+    die.innerHTML = ICONS[s];
+    row.appendChild(die);
+  });
+}
+
+function renderResult(){
+  const c = activeChar();
+  const approach = c.lastApproach;
+  const difficulty = c.lastDifficulty;
+
+  renderDiceRow('diceRow', pending.baseSymbols, approach, pending.baseStats.credoUsed);
+
+  const hasExtra = pending.extraSymbols.length > 0;
+  document.getElementById('extraDivider').style.display = hasExtra ? 'block':'none';
+  if(hasExtra){
+    renderDiceRow('extraDiceRow', pending.extraSymbols, approach, pending.extraCredoUsed);
+  } else {
+    document.getElementById('extraDiceRow').innerHTML = '';
+  }
+
+  const totalMatch = pending.totalMatch;
+  const totalAbstergo = pending.totalAbstergo;
+  const totalCredo = pending.totalCredo;
+  const success = totalMatch >= difficulty;
+  const extraMatches = success ? (totalMatch - difficulty) : 0;
+  const momentum = Math.floor(extraMatches / 2);
+
+  const banner = document.getElementById('resultBanner');
+  if(c.esausto){
+    banner.className = 'result-banner esausto';
+    banner.textContent = success ? 'RIUSCITO — ma sei ESAUSTO' : 'FALLITO — sei ESAUSTO';
+  } else {
+    banner.className = 'result-banner ' + (success ? 'success':'fail');
+    banner.textContent = success ? 'SUCCESSO' : 'FALLIMENTO';
+  }
+
+  document.getElementById('statMatch').textContent = totalMatch + '/' + difficulty;
+  document.getElementById('statAbstergo').textContent = totalAbstergo;
+  document.getElementById('statCredo').textContent = totalCredo;
+  document.getElementById('statSlancio').textContent = momentum;
+
+  const wasIntralciato = c.intralci[approach];
+  const triggersComplicationCheck = wasIntralciato || state.reactionCheck;
+  const complicationNote = document.getElementById('complicationNote');
+  let complicationLevel = null;
+  if(triggersComplicationCheck && totalAbstergo >= 1){
+    complicationLevel = totalAbstergo >= 3 ? 'maggiore' : 'minore';
+    complicationNote.style.display = 'block';
+    complicationNote.textContent = `Complicazione ${complicationLevel} (${totalAbstergo} Abstergo)${state.reactionCheck && !wasIntralciato ? ' — prova di Reazione':''}`;
+  } else {
+    complicationNote.style.display = 'none';
+  }
+
+  const intralcioNote = document.getElementById('intralcioNote');
+  if(!success){
+    intralcioNote.style.display = 'block';
+    if(Object.values(c.intralci).every(Boolean)){
+      intralcioNote.textContent = 'Tutti gli Approcci sono già Intralciati: il personaggio diventa ESAUSTO.';
+    } else if(c.intralci[approach]){
+      intralcioNote.textContent = `${APPROACHES.find(a=>a.key===approach).label} è già Intralciato: scegli un altro Approccio da segnare qui sotto.`;
+    } else {
+      intralcioNote.textContent = `${APPROACHES.find(a=>a.key===approach).label} viene segnato come Intralciato.`;
+    }
+  } else {
+    intralcioNote.style.display = 'none';
+  }
+
+  pending.success = success;
+  pending.momentum = momentum;
+  pending.complicationLevel = complicationLevel;
+
+  // extra dice panel
+  const extraPanel = document.getElementById('extraDicePanel');
+  if(!pending.extraSpent && c.extraDiceAvailable > 0){
+    extraPanel.style.display = 'block';
+    const max = c.extraDiceAvailable;
+    if(pending.spendChoice > max) pending.spendChoice = max;
+    document.getElementById('spendValue').textContent = pending.spendChoice;
+  } else {
+    extraPanel.style.display = 'none';
+  }
+}
+
+document.getElementById('rollBtn').onclick = ()=>{
+  const c = activeChar();
+  const baseFaces = [1,2,3,4,5,6].map(()=>rollOneDie());
+  const baseStats = computeStats(baseFaces, state.descrittoriAttivi);
+
+  pending = {
+    baseSymbols: baseStats.symbols,
+    baseStats: baseStats,
+    extraSymbols: [],
+    extraCredoUsed: 0,
+    extraSpent: false,
+    spendChoice: Math.min(1, c.extraDiceAvailable),
+    totalMatch: baseStats.matchCount,
+    totalAbstergo: baseStats.abstergoCount,
+    totalCredo: baseStats.credoCount
+  };
+
+  document.getElementById('resultCard').style.display = 'block';
+  renderResult();
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+document.getElementById('spendMinus').onclick = ()=>{
+  if(!pending) return;
+  pending.spendChoice = Math.max(0, pending.spendChoice - 1);
+  document.getElementById('spendValue').textContent = pending.spendChoice;
+};
+document.getElementById('spendPlus').onclick = ()=>{
+  if(!pending) return;
+  const c = activeChar();
+  pending.spendChoice = Math.min(c.extraDiceAvailable, pending.spendChoice + 1);
+  document.getElementById('spendValue').textContent = pending.spendChoice;
+};
+document.getElementById('spendBtn').onclick = ()=>{
+  if(!pending || pending.spendChoice <= 0) return;
+  const c = activeChar();
+  const n = pending.spendChoice;
+  const extraFaces = Array.from({length:n}, ()=>rollOneDie());
+  const remainingDescrittori = Math.max(0, state.descrittoriAttivi - pending.baseStats.credoUsed);
+  const extraStats = computeStats(extraFaces, remainingDescrittori);
+
+  pending.extraSymbols = extraStats.symbols;
+  pending.extraCredoUsed = extraStats.credoUsed;
+  pending.totalMatch += extraStats.matchCount;
+  pending.totalAbstergo += extraStats.abstergoCount;
+  pending.totalCredo += extraStats.credoCount;
+  pending.extraSpent = true;
+
+  c.extraDiceAvailable -= n;
+  saveState();
+  renderResult();
+  renderCharDetail();
+};
+
+document.getElementById('confirmBtn').onclick = ()=>{
+  if(!pending) return;
+  const c = activeChar();
+  const approach = c.lastApproach;
+  const difficulty = c.lastDifficulty;
+
+  if(!pending.success){
+    if(Object.values(c.intralci).every(Boolean)){
+      c.esausto = true;
+    } else if(!c.intralci[approach]){
+      c.intralci[approach] = true;
+    }
+    // se l'Approccio era già Intralciato, il giocatore lo segna manualmente su un altro
+    // usando la griglia "Approcci in Intralcio" qui sotto.
+  }
+
+  const extraUsed = pending.extraSymbols.length;
+  const now = new Date();
+  c.log = c.log || [];
+  c.log.push({
+    approach: approach,
+    difficulty: difficulty,
+    match: pending.totalMatch,
+    abstergo: pending.totalAbstergo,
+    credo: pending.totalCredo,
+    extraDiceUsed: extraUsed,
+    success: pending.success,
+    momentum: pending.momentum,
+    complication: pending.complicationLevel,
+    time: now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'})
+  });
+  if(c.log.length > 40) c.log.shift();
+
+  pending = null;
+  document.getElementById('resultCard').style.display = 'none';
+  saveState();
+  renderAll();
+};
+
+function renderAll(){
+  renderCharTabs();
+  renderCharDetail();
+  renderApproachGrid();
+  renderRank();
+  renderSkills();
+  renderSnagGrid();
+  renderLog();
+  document.getElementById('reactionToggle').checked = !!state.reactionCheck;
+  document.getElementById('descValue').textContent = state.descrittoriAttivi || 0;
+  document.getElementById('resultCard').style.display = 'none';
+}
+
+// ---------- init ----------
+loadState();
+renderAll();
+</script>
+</body>
+</html>
