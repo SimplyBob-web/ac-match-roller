@@ -20,7 +20,7 @@
   --violet:#9b8cf2;
   --c-abstergo:#d1483f;
   --c-dinamico:#a13fd1;
-  --c-furtivo:#5b6ee8;
+  --c-furtivo:#2f9fe0;
   --c-astuto:#e08a2e;
   --c-sociale:#8a9a4e;
   --c-credo:#c9a63f;
@@ -508,6 +508,41 @@ input[type=text]:focus{outline:none; border-color:var(--accent-dim);}
 .empty-log{
   text-align:center; color:var(--text-dim); font-size:12.5px; padding:20px 0;
 }
+.preset-picker{
+  margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.06);
+}
+.preset-select{
+  width:100%; background:var(--bg-panel-2); border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px; padding:10px 12px; color:var(--text); font-family:var(--font-body); font-size:14px;
+}
+.preset-select:disabled{opacity:.4;}
+#presetApplyBtn:disabled{opacity:.35; cursor:default;}
+.preset-quote{font-style:italic; color:var(--text-dim); font-size:13px; margin:6px 0 12px; line-height:1.5;}
+.preset-desc{font-size:13px; color:var(--text-dim); margin-bottom:10px; line-height:1.5;}
+.preset-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;}
+.preset-stat{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  background:var(--bg-panel-2); border-radius:10px; padding:8px 4px;
+}
+.preset-stat svg{width:20px;height:20px;}
+.preset-stat .val{font-family:var(--font-display); font-weight:700; font-size:16px;}
+.preset-row-label{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); margin:12px 0 6px;}
+.preset-traits{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
+.preset-pill{
+  background:var(--bg-panel-2); border:1px solid rgba(255,255,255,0.08); border-radius:20px;
+  padding:5px 12px; font-size:12.5px;
+}
+.preset-gear-row{
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:13px;
+}
+.preset-gear-row:last-child{border-bottom:none;}
+.preset-gear-row .distintivo{
+  font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--amber);
+  border:1px solid var(--amber); border-radius:4px; padding:1px 5px; flex-shrink:0;
+}
+.preset-langs{font-size:12.5px; color:var(--text-dim);}
+
 /* ---- view tabs ---- */
 .view-tabs{display:flex; gap:8px; margin-bottom:14px;}
 .view-tab{
@@ -565,10 +600,14 @@ input[type=text]:focus{outline:none; border-color:var(--accent-dim);}
 .skill-list{max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;}
 .skill-item{
   background:var(--bg-panel-2); border:1px solid rgba(255,255,255,0.06); border-radius:9px;
-  overflow:hidden;
 }
+.skill-item summary{
+  list-style:none; cursor:pointer;
+}
+.skill-item summary::-webkit-details-marker{display:none;}
+.skill-item summary::marker{content:'';}
 .skill-item .head{
-  display:flex; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; min-height:20px;
+  display:flex; align-items:center; gap:8px; padding:10px 12px; min-height:20px;
 }
 .skill-item .head .name{flex:1; font-size:15px; font-weight:600; color:var(--text); line-height:1.3;}
 .skill-item .head .tag{
@@ -576,9 +615,8 @@ input[type=text]:focus{outline:none; border-color:var(--accent-dim);}
   padding:3px 7px; border-radius:5px; color:var(--bg); font-weight:700; line-height:1.4;
 }
 .skill-item .head .chev{color:var(--text-dim); font-size:11px; transition:transform .15s; flex-shrink:0;}
-.skill-item.open .head .chev{transform:rotate(180deg);}
-.skill-item .panel{display:none; padding:0 12px 12px;}
-.skill-item.open .panel{display:block;}
+.skill-item[open] .head .chev{transform:rotate(180deg);}
+.skill-item .panel{padding:0 12px 12px;}
 .skill-item .panel .desc{font-size:12.5px; color:var(--text-dim); line-height:1.5; margin-bottom:10px;}
 .skill-add-btn{
   width:100%; background:rgba(94,234,212,0.1); border:1px solid var(--accent-dim);
@@ -619,6 +657,7 @@ footer{
   <div class="view-tabs">
     <button class="view-tab active" id="tabScheda">Scheda</button>
     <button class="view-tab" id="tabAbilita">Abilità</button>
+    <button class="view-tab" id="tabEden">Eden</button>
   </div>
 
   <div id="viewScheda">
@@ -645,13 +684,36 @@ footer{
     <div class="extra-dice-bar" id="extraBar"></div>
     <button class="sequence-btn" id="newSequenceBtn">↻ Nuova Sequenza (ricarica Dadi Extra)</button>
 
+    <div class="preset-picker">
+      <div class="txt" style="font-size:12.5px; color:var(--text-dim); margin-bottom:8px;">Carica un Testimone pregenerato (per l'Antenato)</div>
+      <select id="presetEraSelect" class="preset-select">
+        <option value="">— Scegli l'epoca —</option>
+      </select>
+      <select id="presetWitnessSelect" class="preset-select" style="margin-top:8px;" disabled>
+        <option value="">— Scegli il Testimone —</option>
+      </select>
+      <button class="sequence-btn" id="presetApplyBtn" style="margin-top:8px;" disabled>Applica alla scheda</button>
+    </div>
+
     <button class="delete-char" id="deleteCharBtn">Elimina questo personaggio</button>
+  </div>
+
+  <div class="card" id="presetDetailCard" style="display:none;">
+    <span class="field-label">Dettagli Testimone</span>
+    <div id="presetDetailBody"></div>
+    <button class="clear-btn" id="presetClearBtn">Rimuovi dati Testimone da questa scheda</button>
   </div>
 
   <div class="card">
     <span class="field-label">Abilità</span>
     <div class="skill-summary" id="skillSummary"></div>
     <button class="manage-skills-btn" id="manageSkillsBtn">Gestisci abilità →</button>
+  </div>
+
+  <div class="card">
+    <span class="field-label">Frutti dell'Eden</span>
+    <div class="skill-summary" id="edenSummary"></div>
+    <button class="manage-skills-btn" id="manageEdenBtn">Gestisci Frutti dell'Eden →</button>
   </div>
 
   <div class="card">
@@ -743,9 +805,23 @@ footer{
     </div>
   </div>
 
+  <div id="viewEden" style="display:none;">
+    <div class="card">
+      <span class="field-label">Frutti dell'Eden<small>Artefatti Isu trovati durante le Sequenze. Un personaggio può possederne più di uno, ma di norma ne impugna/indossa uno alla volta.</small></span>
+      <div class="skill-count" id="edenCount"></div>
+      <div class="skill-slots" id="edenSlots"></div>
+
+      <div class="skill-search-wrap">
+        <input type="text" id="edenSearch" placeholder="Cerca un Frutto dell'Eden...">
+      </div>
+      <div class="skill-list" id="edenList"></div>
+    </div>
+  </div>
+
   <footer>
     Strumento creato da un fan, non affiliato né approvato da Ubisoft, CMON o Two Little Mice.<br>
-    Assassin's Creed© è un marchio registrato dei rispettivi proprietari.
+    Assassin's Creed© è un marchio registrato dei rispettivi proprietari.<br>
+    <a href="https://www.streamlinehq.com" target="_blank" rel="noopener" style="color:var(--text-dim);">Icona Furtivo ispirata a "Video Game Assasin Creed" — Free icons from Streamline</a>
   </footer>
 </div>
 
@@ -753,7 +829,7 @@ footer{
 // ---------- Icons (original geometric designs, not reproducing official artwork) ----------
 const ICONS = {
   dinamico: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-dinamico)"/><g transform="translate(1.7384,1.7384) scale(0.040084)"><path d="M329.8 235.69l62.83-82.71 42.86 32.56-62.83 82.75zm-12.86-9.53l66.81-88-45-34.15-66.81 88zm-27.48-97.78l-19.3 39.57 57-75-42.51-32.3-36.24 47.71zm-20.74-73.24l-46.64-35.43-42 55.31 53.67 26.17zm107 235.52l-139-102.71-9.92.91 4.56 2 62.16 138.43-16.52 2.25-57.68-128.5-40-17.7-4-30.84 39.41 19.42 36.36-3.33 17-34.83-110.9-54.09-80.68 112.51L177.6 346.67l-22.7 145.62H341V372.62l35.29-48.93L387 275.77z" fill="#ffffff"/></g></svg>`,
-  furtivo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-furtivo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><ellipse cx="12" cy="12.5" rx="7.5" ry="9" fill="#ffffff"/><path d="M4.8 11.2c0-1.6 1.3-2.7 2.8-2.3 1.7.4 2.9 1.4 3.6 2.3h1.6c.7-.9 1.9-1.9 3.6-2.3 1.5-.4 2.8.7 2.8 2.3v1.1c0 1.7-1.4 3.1-3.2 3.1-1.6 0-3-.9-3.6-2.2-.2-.4-.8-.4-1 0-.6 1.3-2 2.2-3.6 2.2-1.8 0-3.2-1.4-3.2-3.1v-1.1z" fill="var(--c-furtivo)"/><ellipse cx="8.9" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(-18 8.9 11.9)"/><ellipse cx="15.1" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(18 15.1 11.9)"/></g></svg>`,
+  furtivo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-furtivo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M12 1.5 L6.2 7.8 C4.3 10 3.3 12.6 3.3 15.3 C3.3 19.6 7.2 23 12 23 C16.8 23 20.7 19.6 20.7 15.3 C20.7 12.6 19.7 10 17.8 7.8 Z" fill="#ffffff"/><path d="M4.8 11.2c0-1.6 1.3-2.7 2.8-2.3 1.7.4 2.9 1.4 3.6 2.3h1.6c.7-.9 1.9-1.9 3.6-2.3 1.5-.4 2.8.7 2.8 2.3v1.1c0 1.7-1.4 3.1-3.2 3.1-1.6 0-3-.9-3.6-2.2-.2-.4-.8-.4-1 0-.6 1.3-2 2.2-3.6 2.2-1.8 0-3.2-1.4-3.2-3.1v-1.1z" fill="var(--c-furtivo)"/><ellipse cx="8.9" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(-18 8.9 11.9)"/><ellipse cx="15.1" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(18 15.1 11.9)"/></g></svg>`,
   astuto: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-astuto)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M3 12 Q12 0 21 12 Q12 24 3 12 Z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.3" fill="#ffffff"/></g></svg>`,
   sociale: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-sociale)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M4 5h11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#ffffff" opacity="0.6"/><path d="M11 10h9a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1v3l-4-3h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z" fill="#ffffff"/></g></svg>`,
   abstergo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-abstergo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><line x1="6.00" y1="17.00" x2="13.68" y2="3.70" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="12.00" y1="6.61" x2="19.68" y2="19.91" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="18.00" y1="17.00" x2="2.64" y2="17.00" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></g></svg>`,
@@ -793,9 +869,486 @@ const SKILLS = [
   {key:'gioco_mano', name:'Gioco di Mano', approach:'furtivo', text:'Rubando o nascondendo un piccolo oggetto, aggiungi 1 match a una prova di Furtivo correlata. Puoi usare 2 risultati Furtivo per rubare un oggetto dalla Scena.'},
   {key:'mosse_strategiche', name:'Mosse Strategiche', approach:'dinamico', text:'In una prova di Dinamico, considera fino a 1 risultato Astuto come 1 match aggiuntivo.'}
 ];
+const ERAS = [
+  {
+    key: 'eta_regia_roma',
+    label: "Età Regia di Roma",
+    witnesses: [
+      {
+        name: 'Romolo',
+        description: "Leggendario fondatore e primo re di Roma.",
+        quote: "Le parole insegnano, gli esempi trascinano.",
+        approcci: {dinamico:2, furtivo:3, astuto:2, sociale:1},
+        traits: ['Veterano', 'Risoluto'],
+        hindrance: 'Aggressivo',
+        languages: ['Greco Antico', 'Etrusco', 'Latino'],
+        gear: [
+          {name:'Scudo', distintivo:true},
+          {name:'Spada', distintivo:true},
+          {name:'Armatura del Re'},
+          {name:'Lancia'},
+          {name:'Medaglione di Marte'},
+          {name:'Frombola'}
+        ]
+      },
+      {
+        name: 'Prima',
+        description: "Primogenita della Gens Romilia, fondatrice degli Scudi di Marte.",
+        quote: "Siamo creati dalle tempeste che attraversiamo.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Rapida', 'Scaltra'],
+        hindrance: 'Sconsiderata',
+        languages: ['Greco Antico', 'Latino', 'Sabino'],
+        gear: [
+          {name:'Falcetto', distintivo:true},
+          {name:'Lama Nascosta', distintivo:true},
+          {name:'Frombola'},
+          {name:'Libro delle Leggi'},
+          {name:'Bracciale "Scudi di Marte"'},
+          {name:'Gioielli'}
+        ]
+      },
+      {
+        name: 'Numa Pompilio',
+        description: "Leggendario secondo re di Roma.",
+        quote: "La luce degli dèi guida verso le opere degne.",
+        approcci: {dinamico:3, furtivo:3, astuto:1, sociale:1},
+        traits: ['Diplomatico', 'Devoto'],
+        hindrance: 'Ambizioso',
+        languages: ['Greco Antico', 'Etrusco', 'Latino', 'Osco', 'Sabino'],
+        gear: [
+          {name:'Pugnale da Aruspice Sabino', distintivo:true},
+          {name:'Vesti Senatorie', distintivo:true},
+          {name:'Amuleto di Giano'},
+          {name:'Ossa Divinatorie'},
+          {name:'Amuleto'},
+          {name:'Sacchetto di Sale'}
+        ]
+      },
+      {
+        name: 'Osto',
+        description: "Generale e nonno di Tullo Ostilio.",
+        quote: "Non ho chiesto quanti fossero i nemici, ma dove si trovassero.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Feroce', 'Tattico'],
+        hindrance: 'Testardo',
+        languages: ['Etrusco', 'Latino'],
+        gear: [
+          {name:'Spada', distintivo:true},
+          {name:'Amuleto di Marte', distintivo:true},
+          {name:'Sica (Pugnale)'},
+          {name:'Giavellotto'},
+          {name:'Armatura'},
+          {name:'Sacchetto di Sale'}
+        ]
+      },
+      {
+        name: 'Venator',
+        description: "Esperto cacciatore e battistrada, devoto alla dea Diana.",
+        quote: "Sii il predatore, non la preda.",
+        approcci: {dinamico:2, furtivo:1, astuto:2, sociale:3},
+        traits: ['Paziente', 'Cacciatore'],
+        hindrance: 'Irascibile',
+        languages: ['Latino'],
+        gear: [
+          {name:'Arco e Frecce', distintivo:true},
+          {name:'Pugnale', distintivo:true},
+          {name:'Otre'},
+          {name:'Esca'},
+          {name:'Sacco a Pelo'},
+          {name:'Corda'}
+        ]
+      },
+      {
+        name: 'Guardiana del Fuoco',
+        description: "Rispettata sacerdotessa del tempio di Vesta dell'Urbe.",
+        quote: "Servo solo gli dèi.",
+        approcci: {dinamico:3, furtivo:2, astuto:2, sociale:1},
+        traits: ['Fervente', 'Erudita'],
+        hindrance: 'Devozione',
+        languages: ['Etrusco', 'Latino', 'Osco'],
+        gear: [
+          {name:'Torcia Vestale', distintivo:true},
+          {name:'Erbe Medicinali', distintivo:true},
+          {name:'Selce'},
+          {name:'Fiasca d\'Olio'},
+          {name:'Frombola'},
+          {name:'Pergamene del Tempio'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'antica_grecia',
+    label: "Antica Grecia",
+    witnesses: [
+      {
+        name: 'Kassandra',
+        description: "Guerriera spartana, erede di Leonida e Ibrido Isu.",
+        quote: "Se fossi la tua punizione, saresti già morta.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Agile', 'Spartana'],
+        hindrance: 'Misericordiosa',
+        languages: ['Greco Antico', 'Laconico'],
+        gear: [
+          {name:'Lancia di Leonida', distintivo:true},
+          {name:'Armatura da Misthios', distintivo:true},
+          {name:'Arco e Frecce'},
+          {name:'Boccetta di Fuoco Greco'},
+          {name:'Fobos (Cavallo)'},
+          {name:'Ikaros (Aquila)'}
+        ]
+      },
+      {
+        name: 'Dario',
+        description: "Uccisore di Serse, considerato il primo Assassino.",
+        quote: "Ma con tutto il loro potere, non sono riusciti a proteggerti. Non da me.",
+        approcci: {dinamico:2, furtivo:1, astuto:2, sociale:3},
+        traits: ['Elusivo', 'Veterano'],
+        hindrance: 'Vecchie Ferite',
+        languages: ['Greco Antico', 'Antico Persiano'],
+        gear: [
+          {name:'Lama Celata', distintivo:true},
+          {name:'Mantello Mimetico', distintivo:true},
+          {name:'Codex e Appunti'},
+          {name:'Veleno'},
+          {name:'Sacchetto di Dracme'},
+          {name:'Rampino'}
+        ]
+      },
+      {
+        name: 'Erodoto',
+        description: "Il \"Padre della Storia\". Cronista di fatti ed eventi.",
+        quote: "Sono un narratore, o lo ero. Questa guerra ci sta spingendo tutti agli estremi.",
+        approcci: {dinamico:3, furtivo:2, astuto:1, sociale:2},
+        traits: ['Studioso', 'Osservatore'],
+        hindrance: 'Neutralità',
+        languages: ['Greco Antico', 'Attico', 'Dorico', 'Laconico'],
+        gear: [
+          {name:'Mappe e Documenti', distintivo:true},
+          {name:'Boccetta di Fuoco Greco', distintivo:true},
+          {name:'Bastone da Viaggio'},
+          {name:'Sacca di Pergamene'},
+          {name:'Kit da Scasso'},
+          {name:'Pugnale'}
+        ]
+      },
+      {
+        name: 'Xenia',
+        description: "Capo pirata dell'isola di Keos.",
+        quote: "Ho un debole per i tesori rari.",
+        approcci: {dinamico:2, furtivo:3, astuto:2, sociale:1},
+        traits: ['Ben Introdotta', 'Pirata'],
+        hindrance: 'Avidità',
+        languages: ['Greco Antico'],
+        gear: [
+          {name:'Martello da Guerra', distintivo:true},
+          {name:'Documenti di Contrabbando', distintivo:true},
+          {name:'Armatura'},
+          {name:'Mappe Nautiche'},
+          {name:'Pugnale'},
+          {name:'Sacchetto di Dracme'}
+        ]
+      },
+      {
+        name: "L'Artiglio di Nemea",
+        description: "Ex pirata, guerriero mercenario.",
+        quote: "Sono nato per portare questa spada e questo scudo.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Audace', "Combattente d'Arena"],
+        hindrance: 'Egoista',
+        languages: ['Greco Antico'],
+        gear: [
+          {name:'Spada', distintivo:true},
+          {name:'Scudo', distintivo:true},
+          {name:'Armatura'},
+          {name:'Giavellotto'},
+          {name:'Pergamene di Taglia'},
+          {name:'Medaglione di Ares'}
+        ]
+      },
+      {
+        name: "L'Avvoltoio",
+        description: "Cacciatore, mercante e guida nella natura selvaggia.",
+        quote: "Non è possibile entrare due volte nello stesso fiume.",
+        approcci: {dinamico:1, furtivo:1, astuto:3, sociale:3},
+        traits: ['Tiratore Scelto', 'Cacciatore'],
+        hindrance: 'Lupo Solitario',
+        languages: ['Greco Antico'],
+        gear: [
+          {name:'Arco e Frecce', distintivo:true},
+          {name:'Orione (Cane)', distintivo:true},
+          {name:'Attrezzi da Trappola'},
+          {name:'Pugnale'},
+          {name:'Erbe Medicinali'},
+          {name:'Sacco a Pelo'}
+        ]
+      },
+      {
+        name: 'Alexios',
+        description: "Conosciuto anche come Deimos, erede del Re spartano Leonida, Ibrido Isu e Saggio del Culto di Kosmos.",
+        quote: "Anche gli dèi tremano al mio passaggio. Inginocchiati o muori!",
+        approcci: {dinamico:1, furtivo:2, astuto:3, sociale:2},
+        traits: ['Intimidatorio', 'Guerriero'],
+        hindrance: 'Hybris',
+        languages: ['Greco Antico'],
+        gear: [
+          {name:'Kopis (Spada)', distintivo:true},
+          {name:'Armatura da Semidio', distintivo:true},
+          {name:'Arco e Frecce'},
+          {name:"Diadema di Aspasia"},
+          {name:'Giavellotto'},
+          {name:'Lancia'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'seconda_guerra_mondiale',
+    label: "Seconda Guerra Mondiale",
+    witnesses: [
+      {
+        name: "L'Ambasciatore",
+        description: "Vigilante anti-nazista, esperto in tattiche di guerriglia e interrogatorio.",
+        quote: "Quando l'ingiustizia diventa legge, la resistenza diventa un dovere.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Feroce', 'Rapido'],
+        hindrance: 'Vendetta',
+        languages: ['Inglese', 'Francese', 'Tedesco', 'Polacco', 'Russo'],
+        gear: [
+          {name:'Revolver Webley', distintivo:true},
+          {name:'Fucile Lebel Modello 1886', distintivo:true},
+          {name:'Coltello Bolo'},
+          {name:'Maschera'},
+          {name:'Bomba a Mano Frangibile M1'},
+          {name:'Coltello a Serramanico'}
+        ]
+      },
+      {
+        name: 'Reboante',
+        description: "Partigiano italiano, esperto in guerriglia e armi pesanti.",
+        quote: "Bisogna schierarsi, perché non c'è coraggio nella neutralità.",
+        approcci: {dinamico:1, furtivo:1, astuto:3, sociale:3},
+        traits: ['Altruista', 'Combattente'],
+        hindrance: 'Appassionato',
+        languages: ['Francese', 'Ebraico', 'Italiano'],
+        gear: [
+          {name:'Mitra', distintivo:true},
+          {name:'Attrezzi da Esplosivista', distintivo:true},
+          {name:'Coltello a Stiletto'},
+          {name:'Vino'},
+          {name:'Bomba a Manico (Stielhandgranate)'},
+          {name:'Tronchese'}
+        ]
+      },
+      {
+        name: 'Nancy Drake',
+        description: "Agente delle Operazioni Speciali (SOE).",
+        quote: "La libertà è probabilmente l'unica cosa per cui vale la pena morire.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Spietata', 'Sabotatrice'],
+        hindrance: 'Vendetta',
+        languages: ['Inglese', 'Francese', 'Tedesco'],
+        gear: [
+          {name:'Fucile Berthier Mle 92', distintivo:true},
+          {name:'Luger P08', distintivo:true},
+          {name:'Bomba a Manico M24'},
+          {name:'Granata Nebelhand'},
+          {name:'Morfina'},
+          {name:'Coltello Fairbairn-Sykes'}
+        ]
+      },
+      {
+        name: 'Josephine Boulanger',
+        description: "Celebre ballerina di burlesque, agente dei servizi segreti francesi.",
+        quote: "Ballerò tutta la vita... vorrei morire senza fiato, esausta, alla fine di un ballo.",
+        approcci: {dinamico:3, furtivo:2, astuto:2, sociale:1},
+        traits: ['Spia', 'Intrattenitrice'],
+        hindrance: 'Giustizia',
+        languages: ['Inglese', 'Francese', 'Tedesco', 'Spagnolo'],
+        gear: [
+          {name:'FP-45 Liberator', distintivo:true},
+          {name:'Coltello Nascosto', distintivo:true},
+          {name:'Abito Elegante'},
+          {name:'Spartiti Musicali'},
+          {name:'Accendino'},
+          {name:'Sigarette di Canapa Indiana'}
+        ]
+      },
+      {
+        name: 'Penny Rose',
+        description: "Modella americana, fotoreporter e corrispondente di guerra per Rogue.",
+        quote: "Preferirei scattare una fotografia piuttosto che esserne il soggetto.",
+        approcci: {dinamico:3, furtivo:2, astuto:1, sociale:2},
+        traits: ['Risoluta', 'Reporter di Guerra'],
+        hindrance: 'Sconsiderata',
+        languages: ['Inglese', 'Francese', 'Tedesco'],
+        gear: [
+          {name:'Fotocamera Leica III', distintivo:true},
+          {name:'Grimaldelli', distintivo:true},
+          {name:'Tesserino da Giornalista'},
+          {name:'Attrezzi da Travestimento'},
+          {name:'Mappe della Francia'},
+          {name:'Penna (Coltello Nascosto)'}
+        ]
+      },
+      {
+        name: 'Maggiore Gallagher',
+        description: "Maggiore dell'esercito britannico.",
+        quote: "Ti ucciderò con la mia tazza da tè.",
+        approcci: {dinamico:1, furtivo:2, astuto:2, sociale:3},
+        traits: ['Vigoroso', 'Berretto Verde'],
+        hindrance: 'Onore',
+        languages: ['Inglese', 'Tedesco'],
+        gear: [
+          {name:'Coltello Kukri', distintivo:true},
+          {name:'Pistola BHP', distintivo:true},
+          {name:'Mitra Sten'},
+          {name:'Berretto Verde'},
+          {name:'Mantello Antigas'},
+          {name:'Fotocamera Leica III'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'egitto_tolemaico',
+    label: "Egitto Tolemaico",
+    witnesses: [
+      {
+        name: 'Bayek di Siwa',
+        description: "Ultimo Medjay d'Egitto e fondatore degli Occulti.",
+        quote: "Dormire? Non dormo mai. Aspetto soltanto. Nell'ombra.",
+        approcci: {dinamico:1, furtivo:2, astuto:2, sociale:3},
+        traits: ['Medjay', 'Implacabile'],
+        hindrance: 'Vendetta',
+        languages: ['Egiziano', 'Greco Koinè'],
+        gear: [
+          {name:'Arco e Frecce', distintivo:true},
+          {name:'Senu (Aquila)', distintivo:true},
+          {name:'Khopesh (Spada)'},
+          {name:'Scudo'},
+          {name:'Amuleto di Khemu (Figlio)'},
+          {name:'Lama Celata'}
+        ]
+      },
+      {
+        name: 'Aya di Alessandria',
+        description: "Discendente di Kassandra e fondatrice degli Occulti.",
+        quote: "Dall'oscurità siamo venuti, e nell'oscurità resteremo.",
+        approcci: {dinamico:3, furtivo:1, astuto:2, sociale:2},
+        traits: ['Elusiva', 'Scaltra'],
+        hindrance: 'Testarda',
+        languages: ['Aramaico', 'Latino', 'Greco Koinè'],
+        gear: [
+          {name:'Lame Gemelle', distintivo:true},
+          {name:'Lama Celata', distintivo:true},
+          {name:'Arco e Frecce'},
+          {name:'Scudo'},
+          {name:'Fiala di Veleno'},
+          {name:'Corda'}
+        ]
+      },
+      {
+        name: 'Apollodoro il Siciliano',
+        description: "Fedele seguace e amico di Cleopatra, alleato degli Occulti.",
+        quote: "È solo una ferita superficiale.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Ben Introdotto', 'Cospiratore'],
+        hindrance: 'Rimuginatore',
+        languages: ['Latino', 'Egiziano', 'Greco Koinè'],
+        gear: [
+          {name:'Lancia', distintivo:true},
+          {name:'Permesso del Faraone', distintivo:true},
+          {name:'Pugnale'},
+          {name:'Papiro di Informazioni Segrete'},
+          {name:'Dardi Soporiferi'},
+          {name:'Asciugamano da Terme'}
+        ]
+      },
+      {
+        name: 'Foxida',
+        description: "Mercenario greco e navarco (ammiraglio).",
+        quote: "Ah, gli dèi hanno davvero il senso dell'umorismo!",
+        approcci: {dinamico:2, furtivo:2, astuto:1, sociale:3},
+        traits: ['Stoico', 'Veterano'],
+        hindrance: 'Anticonformista',
+        languages: ['Greco Koinè'],
+        gear: [
+          {name:'Pugnale', distintivo:true},
+          {name:'Arco e Frecce', distintivo:true},
+          {name:'Vesti da Navarco'},
+          {name:'Sacchetto di Dracme'},
+          {name:'Giavellotto'},
+          {name:'Trireme'}
+        ]
+      },
+      {
+        name: 'Kensa',
+        description: "Amica d'infanzia di Bayek, in seguito membro degli Occulti.",
+        quote: "Ricchezza, lusso, fama! Cos'altro potrebbe desiderare una donna?",
+        approcci: {dinamico:1, furtivo:2, astuto:3, sociale:2},
+        traits: ["Combattente d'Arena", 'Cacciatrice'],
+        hindrance: 'Vendetta',
+        languages: ['Egiziano', 'Greco Koinè', 'Nubiano'],
+        gear: [
+          {name:'Lancia', distintivo:true},
+          {name:'Pugnale', distintivo:true},
+          {name:'Sacca di Pergamene'},
+          {name:'Scudo'},
+          {name:'Pitture di Guerra'},
+          {name:'Mo (Iena)'}
+        ]
+      },
+      {
+        name: 'Il Phylax',
+        description: "Soldato rinnegato dei Phylakitai e alleato degli Occulti.",
+        quote: "Hai avuto la tua occasione per uccidermi, non ne avrai un'altra.",
+        approcci: {dinamico:1, furtivo:3, astuto:1, sociale:3},
+        traits: ['Rapido', 'Combattente'],
+        hindrance: 'Giustizia',
+        languages: ['Egiziano', 'Greco Koinè'],
+        gear: [
+          {name:'Spada', distintivo:true},
+          {name:'Dardi Avvelenati', distintivo:true},
+          {name:'Giavellotto'},
+          {name:'Scudo'},
+          {name:'Arco e Frecce'},
+          {name:'Meri Heka (Cammello)'}
+        ]
+      }
+    ]
+  }
+];
+
+const EDEN_ITEMS = [
+  {key:'mela_2', name:'Mela 2', category:'mela', text:'Quando tieni in mano questa Mela, puoi influenzare le menti delle persone attorno a te e proiettare illusioni ottiche. Inoltre, puoi creare ologrammi tangibili e diventare invisibile a piacimento. La Mela conferisce conoscenze antiche e ti consente di aggiungere 1 match a ogni prova d\'Approccio Astuto.'},
+  {key:'mela_4', name:'Mela 4', category:'mela', text:'Quando tieni in mano questa Mela, puoi influenzare le menti delle persone attorno a te e proiettare illusioni ottiche.'},
+  {key:'mela_7', name:'Mela 7', category:'mela', text:'Quando tieni in mano questa Mela, puoi influenzare le menti delle persone attorno a te e proiettare illusioni ottiche. Inoltre, puoi diventare invisibile a piacimento.'},
+  {key:'scettro_alessandro', name:'Scettro di Alessandro Magno', category:'bastone', text:'Quando impugni questo scettro, puoi controllare le menti delle persone attorno a te. Inoltre, puoi creare illusioni ottiche e diventare invisibile a piacimento. Combinando questo Bastone dell\'Eden e la Mela 2, puoi aprire le Cripte Isu di Siwa.'},
+  {key:'durendala', name:'Durendala', category:'spada', text:'Quando brandisci questa spada, ottieni 2 Slanci in ogni prova d\'Approccio Dinamico effettuata per combattere dei nemici. Se soffri di almeno 1 Intralcio, ottieni invece 1 solo Slancio.'},
+  {key:'harpe', name:'Harpe (Arpa di Perseo)', category:'spada', text:'Quando brandisci questa spada, ottieni la capacità di scagliare scariche d\'energia, proteggerti con uno scudo d\'energia e teletrasportarti a piacimento.'},
+  {key:'spada_eden_1', name:'Spada dell\'Eden #1', category:'spada', text:'Quando brandisci questa spada, ottieni la capacità di incutere timore o suscitare ammirazione nelle persone attorno a te, ecolocalizzare i nemici e scagliare scariche d\'energia. Originariamente, il portatore poteva anche teletrasportarsi a piacimento, ma questa capacità è andata perduta nel 1794.'},
+  {key:'spada_eden_2', name:'Spada dell\'Eden #2', category:'spada', text:'Quando brandisci questa spada, ottieni la capacità di scagliare scariche d\'energia e teletrasportarti a piacimento per brevi distanze. Quando effettui una prova d\'Approccio Sociale, ottieni 1 Slancio.'},
+  {key:'spada_damocle', name:'Spada di Damocle', category:'spada', text:'Quando brandisci questa spada, ottieni 2 Slanci in ogni prova d\'Approccio Dinamico effettuata per combattere dei nemici. Inoltre, ottieni la capacità di scagliare scariche d\'energia e di proteggerti con uno scudo d\'energia.'},
+  {key:'spada_marte', name:'Spada di Marte (Excalibur)', category:'spada', text:'Quando brandisci questa spada, ottieni 1 Slancio in ogni prova d\'Approccio Dinamico effettuata per combattere dei nemici e puoi chiedere l\'aumento di 2 della difficoltà per accecare un avversario per il resto della Sequenza. Inoltre, ottieni l\'abilità di incutere timore o suscitare ammirazione nelle persone attorno a te e di scagliare scariche d\'energia.'},
+  {key:'sindone_2', name:'Sindone dell\'Eden 2', category:'sindone', text:'Quando indossi questa Sindone, ottieni la capacità di rigenerarti e guarire dalle ferite fisiche. Una volta per Sequenza, puoi attivarla per riprenderti dagli Intralci come se fossi in un rifugio sicuro. Inoltre, ottieni una forza eccezionale: quando effettui una prova d\'Approccio Dinamico o di Reazione che coinvolge i muscoli, ottieni 1 Slancio.'},
+  {key:'sindone_ignoto1', name:'Sindone dell\'Eden #Ignoto_1', category:'sindone', text:'Quando indossi la Sindone, ottieni la capacità di rigenerarti e guarire dalle ferite fisiche, e 1 Slancio in ogni prova d\'Approccio Dinamico o di Reazione che coinvolge i muscoli (1×/Sequenza, come un rifugio sicuro contro gli Intralci). Ma senti costantemente voci litigiose: la difficoltà delle prove d\'Approccio Astuto e Sociale aumenta di 1, e un Intralcio su uno di questi due Approcci ti rende immediatamente Esausto, rischiando la possessione da parte di Giunone o Conso.'},
+  {key:'anello_pirata', name:'Anello Pirata dell\'Eden', category:'anello', text:'Quando indossi questo anello, ottieni la capacità di proteggerti con uno scudo d\'energia.'},
+  {key:'anello_sangue', name:'Anello del Sangue', category:'anello', text:'Abbracciando il potere di questo anello ottieni abilità soprannaturali e l\'illusorio aspetto di un vampiro. Quando lo utilizzi, puoi influenzare le menti delle persone attorno a te. Inoltre, una volta per Sequenza, puoi bere sangue umano per riprenderti dagli Intralci come se fossi in un rifugio sicuro. In una prova d\'Approccio Dinamico, puoi considerare fino a 2 icone Sociali come 1 match aggiuntivo ciascuna.'},
+  {key:'anello_sabbia', name:'Anello della Sabbia', category:'anello', text:'Abbracciando il potere di questo anello ottieni capacità soprannaturali e l\'illusorio aspetto di una mummia. Quando lo utilizzi, puoi creare illusioni ottiche e incutere timore e orrore nelle persone attorno a te. Ti muovi con la rapidità delle sabbie del deserto e, in una prova d\'Approccio Dinamico, puoi considerare 1 icona Furtiva come 1 match aggiuntivo.'},
+  {key:'anello_luna', name:'Anello della Luna', category:'anello', text:'Abbracciando il potere di questo anello ottieni capacità soprannaturali e l\'illusorio aspetto di un lupo mannaro. Ottieni sensi potenziati per individuare facilmente alleati, nemici, obiettivi e bersagli a corto raggio. In una prova di Reazione, puoi ritirare fino a 2 icone Abstergo. Inoltre, ottieni 1 Slancio in ogni prova d\'Approccio Dinamico effettuata in combattimento o corsa acrobatica.'},
+  {key:'egida_minerva', name:'Egida di Minerva', category:'armatura', text:'Quando indossi questa armatura ed effettui una prova d\'Approccio Furtivo, ottieni 1 Slancio.'},
+  {key:'scheggia_eden', name:'Scheggia dell\'Eden', category:'scheggia', text:'Le Schegge dell\'Eden sono residui di tecnologia Isu che conservano parte del potere dei Frutti dell\'Eden. Una Scheggia possiede un singolo potere di un Frutto dell\'Eden a scelta dell\'Interprete.'}
+];
+function edenCategoryLabel(cat){
+  const map = {mela:'Mele', bastone:'Bastoni', spada:'Spade', sindone:'Sindoni', anello:'Anelli', armatura:'Armature', scheggia:'Schegge'};
+  return map[cat] || cat;
+}
+
 const MAX_SKILLS = 3;
-let openSkillKey = null;
 let skillSearchTerm = '';
+let edenSearchTerm = '';
 
 const STORAGE_KEY = 'ac_match_roller_v2';
 
@@ -809,6 +1362,8 @@ function newCharacter(name, type){
     intralci: {dinamico:false, furtivo:false, astuto:false, sociale:false},
     esausto: false,
     skills: [],
+    edenItems: [],
+    preset: null,
     lastApproach: 'dinamico',
     lastDifficulty: 2,
     log: []
@@ -830,7 +1385,11 @@ function loadState(){
       const parsed = JSON.parse(raw);
       if(parsed && parsed.characters && parsed.characters.length){
         state = parsed;
-        state.characters.forEach(c=>{ if(!Array.isArray(c.skills)) c.skills = []; });
+        state.characters.forEach(c=>{
+          if(!Array.isArray(c.skills)) c.skills = [];
+          if(!Array.isArray(c.edenItems)) c.edenItems = [];
+          if(c.preset === undefined) c.preset = null;
+        });
       }
     }
   }catch(e){ /* usa default */ }
@@ -894,6 +1453,102 @@ function renderCharDetail(){
   }
 
   document.getElementById('deleteCharBtn').style.display = state.characters.length > 1 ? 'block':'none';
+
+  renderPresetDetail();
+}
+
+// ---------- testimoni pregenerati ----------
+function populatePresetEraSelect(){
+  const sel = document.getElementById('presetEraSelect');
+  ERAS.forEach(era=>{
+    const opt = document.createElement('option');
+    opt.value = era.key;
+    opt.textContent = era.label;
+    sel.appendChild(opt);
+  });
+}
+document.getElementById('presetEraSelect').addEventListener('change', (e)=>{
+  const witnessSel = document.getElementById('presetWitnessSelect');
+  const applyBtn = document.getElementById('presetApplyBtn');
+  witnessSel.innerHTML = '<option value="">— Scegli il Testimone —</option>';
+  const era = ERAS.find(x=>x.key === e.target.value);
+  if(era){
+    era.witnesses.forEach((w,i)=>{
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = w.name;
+      witnessSel.appendChild(opt);
+    });
+    witnessSel.disabled = false;
+  } else {
+    witnessSel.disabled = true;
+  }
+  applyBtn.disabled = true;
+});
+document.getElementById('presetWitnessSelect').addEventListener('change', (e)=>{
+  document.getElementById('presetApplyBtn').disabled = (e.target.value === '');
+});
+document.getElementById('presetApplyBtn').onclick = ()=>{
+  const eraKey = document.getElementById('presetEraSelect').value;
+  const wIdx = document.getElementById('presetWitnessSelect').value;
+  const era = ERAS.find(x=>x.key === eraKey);
+  if(!era || wIdx === '') return;
+  const witness = era.witnesses[wIdx];
+  const c = activeChar();
+  c.name = witness.name;
+  c.type = 'antenato';
+  c.preset = { eraLabel: era.label, ...witness };
+  document.getElementById('presetEraSelect').value = '';
+  document.getElementById('presetWitnessSelect').innerHTML = '<option value="">— Scegli il Testimone —</option>';
+  document.getElementById('presetWitnessSelect').disabled = true;
+  document.getElementById('presetApplyBtn').disabled = true;
+  saveState();
+  renderAll();
+};
+document.getElementById('presetClearBtn').onclick = ()=>{
+  activeChar().preset = null;
+  saveState();
+  renderAll();
+};
+
+function renderPresetDetail(){
+  const c = activeChar();
+  const card = document.getElementById('presetDetailCard');
+  if(!c.preset){
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  const p = c.preset;
+  const body = document.getElementById('presetDetailBody');
+
+  const statsHtml = APPROACHES.map(a=>`
+    <div class="preset-stat">
+      ${ICONS[a.key]}
+      <div class="val">${p.approcci[a.key]}</div>
+    </div>
+  `).join('');
+
+  const gearHtml = p.gear.map(g=>`
+    <div class="preset-gear-row">
+      <span>${g.name}</span>
+      ${g.distintivo ? '<span class="distintivo">Distintivo</span>' : ''}
+    </div>
+  `).join('');
+
+  body.innerHTML = `
+    <div class="preset-desc">${p.eraLabel} — ${p.description}</div>
+    <div class="preset-quote">"${p.quote}"</div>
+    <div class="preset-stats">${statsHtml}</div>
+    <div class="preset-row-label">Tratti</div>
+    <div class="preset-traits">${p.traits.map(t=>`<span class="preset-pill">${t}</span>`).join('')}</div>
+    <div class="preset-row-label">Ostacolo</div>
+    <div class="preset-traits"><span class="preset-pill" style="border-color:var(--danger); color:var(--danger);">${p.hindrance}</span></div>
+    <div class="preset-row-label">Equipaggiamento</div>
+    <div>${gearHtml}</div>
+    <div class="preset-row-label">Lingue</div>
+    <div class="preset-langs">${p.languages.join(', ')}</div>
+  `;
 }
 
 document.getElementById('charName').addEventListener('input', (e)=>{
@@ -1104,14 +1759,14 @@ function renderSkills(){
     groupSkills.forEach(sk=>{
       const already = c.skills.includes(sk.key);
       const full = c.skills.length >= unlocked;
-      const item = document.createElement('div');
-      item.className = 'skill-item' + (openSkillKey === sk.key ? ' open' : '');
+      const item = document.createElement('details');
+      item.className = 'skill-item';
       item.innerHTML = `
-        <div class="head">
+        <summary class="head">
           <span class="name">${sk.name}</span>
           <span class="tag" style="background:${approachColorVar(sk.approach)};">${approachLabel(sk.approach)}</span>
           <span class="chev">▾</span>
-        </div>
+        </summary>
         <div class="panel">
           <div class="desc">${colorizeSkillText(sk.text)}</div>
           ${already
@@ -1120,10 +1775,6 @@ function renderSkills(){
           }
         </div>
       `;
-      item.querySelector('.head').onclick = ()=>{
-        openSkillKey = (openSkillKey === sk.key) ? null : sk.key;
-        renderSkills();
-      };
       if(!already){
         const btn = item.querySelector('.skill-add-btn');
         if(btn) btn.onclick = (e)=>{ e.stopPropagation(); addSkill(sk.key); };
@@ -1138,16 +1789,140 @@ document.getElementById('skillSearch').addEventListener('input', (e)=>{
   renderSkills();
 });
 
+// ---------- frutti dell'eden ----------
+function addEdenItem(key){
+  const c = activeChar();
+  if(c.edenItems.includes(key)) return;
+  c.edenItems.push(key);
+  saveState();
+  renderEden();
+}
+function removeEdenItem(key){
+  const c = activeChar();
+  c.edenItems = c.edenItems.filter(k=>k!==key);
+  saveState();
+  renderEden();
+}
+
+function renderEdenSummary(){
+  const c = activeChar();
+  const el = document.getElementById('edenSummary');
+  if(!el) return;
+  el.innerHTML = '';
+  if(c.edenItems.length === 0){
+    el.innerHTML = '<div class="skill-summary-chip empty">Nessun Frutto dell\'Eden posseduto</div>';
+    return;
+  }
+  c.edenItems.forEach(key=>{
+    const it = EDEN_ITEMS.find(e=>e.key===key);
+    const chip = document.createElement('div');
+    chip.className = 'skill-summary-chip';
+    chip.innerHTML = `<span class="dot" style="background:var(--amber);"></span><span>${it.name}</span>`;
+    el.appendChild(chip);
+  });
+}
+
+function renderEden(){
+  const c = activeChar();
+  renderEdenSummary();
+
+  const countEl = document.getElementById('edenCount');
+  if(countEl) countEl.innerHTML = `<b>${c.edenItems.length}</b> Frutt${c.edenItems.length===1?'o':'i'} dell'Eden posseduti`;
+
+  const slotsEl = document.getElementById('edenSlots');
+  if(slotsEl){
+    slotsEl.innerHTML = '';
+    if(c.edenItems.length === 0){
+      const slot = document.createElement('div');
+      slot.className = 'skill-slot empty';
+      slot.textContent = 'Nessun Frutto dell\'Eden ancora trovato';
+      slotsEl.appendChild(slot);
+    } else {
+      c.edenItems.forEach(key=>{
+        const it = EDEN_ITEMS.find(e=>e.key===key);
+        const slot = document.createElement('div');
+        slot.className = 'skill-slot';
+        slot.innerHTML = `
+          <div class="body">
+            <div class="name-row">
+              <span class="name">${it.name}</span>
+              <span class="tag" style="background:var(--amber);">${edenCategoryLabel(it.category)}</span>
+            </div>
+            <div class="desc">${colorizeSkillText(it.text)}</div>
+          </div>
+          <button class="skill-remove">Rimuovi</button>
+        `;
+        slot.querySelector('.skill-remove').onclick = ()=> removeEdenItem(key);
+        slotsEl.appendChild(slot);
+      });
+    }
+  }
+
+  const listEl = document.getElementById('edenList');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  const term = edenSearchTerm.trim().toLowerCase();
+  const filtered = EDEN_ITEMS.filter(it => it.name.toLowerCase().includes(term));
+  if(filtered.length === 0){
+    listEl.innerHTML = '<div class="skill-empty-search">Nessun Frutto dell\'Eden trovato.</div>';
+    return;
+  }
+
+  const groupOrder = ['mela','bastone','spada','sindone','anello','armatura','scheggia'];
+  groupOrder.forEach(cat=>{
+    const items = filtered.filter(it=>it.category === cat);
+    if(items.length === 0) return;
+    const title = document.createElement('div');
+    title.className = 'skill-group-title';
+    title.textContent = edenCategoryLabel(cat);
+    listEl.appendChild(title);
+
+    items.forEach(it=>{
+      const already = c.edenItems.includes(it.key);
+      const item = document.createElement('details');
+      item.className = 'skill-item';
+      item.innerHTML = `
+        <summary class="head">
+          <span class="name">${it.name}</span>
+          <span class="tag" style="background:var(--amber);">${edenCategoryLabel(it.category)}</span>
+          <span class="chev">▾</span>
+        </summary>
+        <div class="panel">
+          <div class="desc">${colorizeSkillText(it.text)}</div>
+          ${already
+            ? '<div class="skill-added-note">✓ Già nella scheda</div>'
+            : '<button class="skill-add-btn">+ Aggiungi alla scheda</button>'
+          }
+        </div>
+      `;
+      if(!already){
+        const btn = item.querySelector('.skill-add-btn');
+        if(btn) btn.onclick = (e)=>{ e.stopPropagation(); addEdenItem(it.key); };
+      }
+      listEl.appendChild(item);
+    });
+  });
+}
+
+document.getElementById('edenSearch').addEventListener('input', (e)=>{
+  edenSearchTerm = e.target.value;
+  renderEden();
+});
+
 function switchView(view){
   document.getElementById('viewScheda').style.display = view === 'scheda' ? '' : 'none';
   document.getElementById('viewAbilita').style.display = view === 'abilita' ? '' : 'none';
+  document.getElementById('viewEden').style.display = view === 'eden' ? '' : 'none';
   document.getElementById('tabScheda').classList.toggle('active', view === 'scheda');
   document.getElementById('tabAbilita').classList.toggle('active', view === 'abilita');
-  if(view === 'abilita') window.scrollTo(0,0);
+  document.getElementById('tabEden').classList.toggle('active', view === 'eden');
+  if(view !== 'scheda') window.scrollTo(0,0);
 }
 document.getElementById('tabScheda').onclick = ()=> switchView('scheda');
 document.getElementById('tabAbilita').onclick = ()=> switchView('abilita');
+document.getElementById('tabEden').onclick = ()=> switchView('eden');
 document.getElementById('manageSkillsBtn').onclick = ()=> switchView('abilita');
+document.getElementById('manageEdenBtn').onclick = ()=> switchView('eden');
 
 
 
@@ -1409,6 +2184,7 @@ function renderAll(){
   renderApproachGrid();
   renderRank();
   renderSkills();
+  renderEden();
   renderSnagGrid();
   renderLog();
   document.getElementById('reactionToggle').checked = !!state.reactionCheck;
@@ -1417,6 +2193,7 @@ function renderAll(){
 }
 
 // ---------- init ----------
+populatePresetEraSelect();
 loadState();
 renderAll();
 </script>
