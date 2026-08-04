@@ -241,7 +241,7 @@ input[type=text]:focus{outline:none; border-color:var(--accent-dim);}
   color:var(--text);
   position:relative;
 }
-.approach-btn svg{width:26px;height:26px;}
+.approach-btn svg{width:64px;height:64px;}
 .approach-btn .name{
   font-family:var(--font-display);
   font-weight:600;
@@ -829,7 +829,7 @@ footer{
 // ---------- Icons (original geometric designs, not reproducing official artwork) ----------
 const ICONS = {
   dinamico: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-dinamico)"/><g transform="translate(1.7384,1.7384) scale(0.040084)"><path d="M329.8 235.69l62.83-82.71 42.86 32.56-62.83 82.75zm-12.86-9.53l66.81-88-45-34.15-66.81 88zm-27.48-97.78l-19.3 39.57 57-75-42.51-32.3-36.24 47.71zm-20.74-73.24l-46.64-35.43-42 55.31 53.67 26.17zm107 235.52l-139-102.71-9.92.91 4.56 2 62.16 138.43-16.52 2.25-57.68-128.5-40-17.7-4-30.84 39.41 19.42 36.36-3.33 17-34.83-110.9-54.09-80.68 112.51L177.6 346.67l-22.7 145.62H341V372.62l35.29-48.93L387 275.77z" fill="#ffffff"/></g></svg>`,
-  furtivo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-furtivo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M12 1.5 L6.2 7.8 C4.3 10 3.3 12.6 3.3 15.3 C3.3 19.6 7.2 23 12 23 C16.8 23 20.7 19.6 20.7 15.3 C20.7 12.6 19.7 10 17.8 7.8 Z" fill="#ffffff"/><path d="M4.8 11.2c0-1.6 1.3-2.7 2.8-2.3 1.7.4 2.9 1.4 3.6 2.3h1.6c.7-.9 1.9-1.9 3.6-2.3 1.5-.4 2.8.7 2.8 2.3v1.1c0 1.7-1.4 3.1-3.2 3.1-1.6 0-3-.9-3.6-2.2-.2-.4-.8-.4-1 0-.6 1.3-2 2.2-3.6 2.2-1.8 0-3.2-1.4-3.2-3.1v-1.1z" fill="var(--c-furtivo)"/><ellipse cx="8.9" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(-18 8.9 11.9)"/><ellipse cx="15.1" cy="11.9" rx="1.5" ry="1" fill="var(--c-furtivo)" transform="rotate(18 15.1 11.9)"/></g></svg>`,
+  furtivo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-furtivo)"/><g transform="translate(12,12) scale(0.8)"><path d="M 11.87,11.87 C 11.17,11.42 8.11,9.93 7.7,9.15 C 7.29,8.37 9.0,7.98 9.39,7.2 C 9.78,6.42 10.13,5.78 10.04,4.48 C 9.95,3.18 9.48,1.39 8.87,-0.58 C 8.26,-2.55 7.17,-5.75 6.39,-7.33 C 5.61,-8.91 5.0,-9.32 4.17,-10.05 C 3.34,-10.79 2.23,-11.42 1.43,-11.74 C 0.63,-12.06 0.02,-12.09 -0.65,-12.0 C -1.32,-11.91 -1.67,-11.91 -2.61,-11.22 C -3.54,-10.53 -5.17,-9.71 -6.26,-7.85 C -7.35,-5.99 -8.48,-2.35 -9.13,-0.06 C -9.78,2.23 -10.39,4.37 -10.17,5.9 C -9.95,7.44 -7.53,8.16 -7.83,9.15 C -8.13,10.14 -11.3,11.42 -12.0,11.87" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><path d="M -5.48,0.84 C -5.15,0.93 -4.19,1.62 -3.65,1.75 C -3.11,1.88 -2.79,1.79 -2.22,1.62 C -1.66,1.45 -1.09,0.69 -0.26,0.71 C 0.57,0.73 1.98,1.6 2.74,1.75 C 3.5,1.9 3.86,1.75 4.3,1.62 C 4.73,1.49 5.15,0.99 5.35,0.97 C 5.55,0.95 5.57,1.08 5.48,1.49 C 5.39,1.9 5.16,2.75 4.83,3.44 C 4.5,4.13 4.06,4.97 3.52,5.64 C 2.98,6.31 2.24,7.07 1.57,7.46 C 0.9,7.85 0.11,8.04 -0.52,7.98 C -1.15,7.92 -1.72,7.44 -2.22,7.07 C -2.72,6.7 -3.04,6.46 -3.52,5.77 C -4.0,5.08 -4.74,3.68 -5.09,2.92 C -5.44,2.16 -5.54,1.58 -5.61,1.23 C -5.68,0.88 -5.81,0.75 -5.48,0.84 Z" fill="#ffffff"/><path d="M -5.48,-2.66 C -5.24,-2.99 -4.39,-3.94 -3.91,-4.35 C -3.43,-4.76 -3.13,-4.91 -2.61,-5.12 C -2.09,-5.33 -1.32,-5.55 -0.78,-5.64 C -0.24,-5.73 0.02,-5.77 0.65,-5.64 C 1.28,-5.51 2.48,-5.08 3.0,-4.86 C 3.52,-4.65 3.39,-4.74 3.78,-4.35 C 4.17,-3.96 5.59,-2.83 5.35,-2.53 C 5.11,-2.23 3.26,-2.62 2.35,-2.53 C 1.44,-2.44 0.65,-2.01 -0.13,-2.01 C -0.91,-2.01 -1.7,-2.42 -2.35,-2.53 C -3.0,-2.64 -3.54,-2.68 -4.04,-2.66 C -4.54,-2.64 -5.11,-2.4 -5.35,-2.4 C -5.59,-2.4 -5.72,-2.33 -5.48,-2.66 Z" fill="#ffffff"/><ellipse cx="3.05" cy="-0.3" rx="1.6" ry="0.78" fill="var(--c-furtivo)"/><ellipse cx="-3.1" cy="-0.3" rx="1.6" ry="0.78" fill="var(--c-furtivo)"/></g></svg>`,
   astuto: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-astuto)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M3 12 Q12 0 21 12 Q12 24 3 12 Z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.3" fill="#ffffff"/></g></svg>`,
   sociale: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-sociale)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><path d="M4 5h11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#ffffff" opacity="0.6"/><path d="M11 10h9a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1v3l-4-3h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z" fill="#ffffff"/></g></svg>`,
   abstergo: `<svg viewBox="0 0 24 24" fill="none"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="var(--c-abstergo)"/><g transform="translate(12,12) scale(0.86) translate(-12,-12)"><line x1="6.00" y1="17.00" x2="13.68" y2="3.70" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="12.00" y1="6.61" x2="19.68" y2="19.91" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line x1="18.00" y1="17.00" x2="2.64" y2="17.00" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></g></svg>`,
@@ -1315,6 +1315,546 @@ const ERAS = [
           {name:'Scudo'},
           {name:'Arco e Frecce'},
           {name:'Meri Heka (Cammello)'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'eta_vichinga',
+    label: "Età Vichinga",
+    witnesses: [
+      {
+        name: 'Eivor',
+        description: "Guerriera vichinga e jarlskona del Clan del Corvo.",
+        quote: "...il mio destino è mio da tessere.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Astuta', 'Robusta'],
+        hindrance: 'Onore',
+        languages: ['Inglese', 'Francese', 'Norreno'],
+        gear: [
+          {name:'Armatura del Clan del Corvo', distintivo:true},
+          {name:'Lama Celata', distintivo:true},
+          {name:'Arco e Frecce'},
+          {name:'Due Asce'},
+          {name:'Corda'},
+          {name:'Ciondolo di Odino'}
+        ]
+      },
+      {
+        name: 'Hytham',
+        description: "Adepto degli Occulti del Califfato Abbaside, apprendista di Basim Ibn Ishaq.",
+        quote: "Non è una questione di valore, è una questione di devozione al credo.",
+        approcci: {dinamico:2, furtivo:1, astuto:2, sociale:3},
+        traits: ['Disciplinato', 'Vigile'],
+        hindrance: 'Idealista',
+        languages: ['Greco Bizantino', 'Inglese', 'Latino', 'Norreno'],
+        gear: [
+          {name:'Lama Celata', distintivo:true},
+          {name:'Saif (Spada)', distintivo:true},
+          {name:'Pugnale'},
+          {name:'Bombe Fumogene'},
+          {name:'Pugnali da Lancio'},
+          {name:'Vesti da Adepto'}
+        ]
+      },
+      {
+        name: 'Randvi',
+        description: "Consigliera capo di Ravensthorpe e moglie di Sigurd Styrbjornsson.",
+        quote: "Mi sento in qualche modo intrappolata. In questa stanza, in questo insediamento, in questa vita.",
+        approcci: {dinamico:3, furtivo:2, astuto:2, sociale:1},
+        traits: ['Affascinante', 'Tattica'],
+        hindrance: 'Orgoglio',
+        languages: ['Inglese', 'Norreno'],
+        gear: [
+          {name:'Spada Corta', distintivo:true},
+          {name:'Vesti da Jarl', distintivo:true},
+          {name:'Seax (Coltello)'},
+          {name:'Gioielli'},
+          {name:'Mappe Regionali'},
+          {name:'Corno per Bevande'}
+        ]
+      },
+      {
+        name: 'Valka',
+        description: "Veggente e guaritrice del Clan del Corvo a Ravensthorpe.",
+        quote: "Ho bisogno di silenzio per ascoltare i canti della natura.",
+        approcci: {dinamico:3, furtivo:2, astuto:1, sociale:2},
+        traits: ['Saggia', 'Rispettata'],
+        hindrance: 'Superstiziosa',
+        languages: ['Norreno'],
+        gear: [
+          {name:'Erbe Allucinogene', distintivo:true},
+          {name:'Polveri Alchemiche', distintivo:true},
+          {name:'Rune Divinatorie'},
+          {name:"Pugnale d'Osso"},
+          {name:'Abiti da Veggente'},
+          {name:'Pitture Rituali'}
+        ]
+      },
+      {
+        name: 'Sigurd Styrbjornsson',
+        description: "Jarl vichingo di Norvegia e fratellastro maggiore di Eivor.",
+        quote: "È un capo saggio colui che considera i bisogni degli altri.",
+        approcci: {dinamico:1, furtivo:2, astuto:3, sociale:2},
+        traits: ['Veterano', 'Crudele'],
+        hindrance: 'Impaziente',
+        languages: ['Inglese', 'Norreno'],
+        gear: [
+          {name:'Spada Bulgara', distintivo:true},
+          {name:"Fibbia con l'Emblema di Tyr", distintivo:true},
+          {name:'Armatura da Jarl'},
+          {name:'Scudo del Clan del Corvo'},
+          {name:'Ascia Vichinga'},
+          {name:'Seax (Coltello)'}
+        ]
+      },
+      {
+        name: 'Il Cavaliere Drago',
+        description: "Misterioso cavaliere devoto alla causa degli Occulti.",
+        quote: "Combatterò contro chiunque neghi la libertà agli altri.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Stoico', 'Robusto'],
+        hindrance: 'Sconsiderato',
+        languages: ['Inglese', 'Norreno'],
+        gear: [
+          {name:'Armatura da Cavaliere', distintivo:true},
+          {name:'Claíomh Solais (Spada)', distintivo:true},
+          {name:'Otre'},
+          {name:'Scutum (Scudo)'},
+          {name:'Seax (Coltello)'},
+          {name:'Merlin (Cavallo)'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'il_levante',
+    label: "Il Levante",
+    witnesses: [
+      {
+        name: "Altaïr Ibn-La'Ahad",
+        description: "Membro della Confraternita Levantina, in seguito mentore di molti altri Assassini.",
+        quote: "Il nostro Credo non ci ordina di essere liberi. Ci ordina di essere saggi.",
+        approcci: {dinamico:2, furtivo:1, astuto:3, sociale:2},
+        traits: ['Saggio', 'Veterano'],
+        hindrance: 'Impulsivo',
+        languages: ['Arabo', 'Greco', 'Francese', 'Mongolo'],
+        gear: [
+          {name:'Lame Doppie Celate', distintivo:true},
+          {name:'Mantello da Assassino', distintivo:true},
+          {name:'Spada'},
+          {name:'Spada Corta'},
+          {name:'Coltelli da Lancio'},
+          {name:'Armatura di Cuoio'}
+        ]
+      },
+      {
+        name: 'Maria Thorpe',
+        description: "Nobildonna inglese ed ex Templare, moglie di Altaïr.",
+        quote: "Per il bene della Confraternita, non per scopo di vendetta.",
+        approcci: {dinamico:2, furtivo:3, astuto:2, sociale:1},
+        traits: ['Implacabile', 'Saggia'],
+        hindrance: 'Testarda',
+        languages: ['Arabo', 'Inglese', 'Francese', 'Mongolo'],
+        gear: [
+          {name:'Spadone', distintivo:true},
+          {name:'Cotta di Maglia', distintivo:true},
+          {name:'Vesti Templari'},
+          {name:'Kit da Travestimento'},
+          {name:'Pugnale'},
+          {name:'Arco e Frecce'}
+        ]
+      },
+      {
+        name: "Darim Ibn-La'Ahad",
+        description: "Assassino della Confraternita Levantina, figlio maggiore di Altaïr e Maria Thorpe.",
+        quote: "Tutto ciò che di buono è in me, è iniziato con mio padre.",
+        approcci: {dinamico:1, furtivo:2, astuto:3, sociale:2},
+        traits: ['Risoluto', 'Combattente'],
+        hindrance: 'Impulsivo',
+        languages: ['Arabo', 'Greco', 'Mongolo'],
+        gear: [
+          {name:'Lame Celate', distintivo:true},
+          {name:'Balestra', distintivo:true},
+          {name:'Spada'},
+          {name:'Spada Corta'},
+          {name:'Coltelli da Lancio'},
+          {name:'Armatura di Cuoio'}
+        ]
+      },
+      {
+        name: 'Malik Al-Sayf',
+        description: "Assassino della Confraternita Levantina e capo dell'Ufficio di Gerusalemme.",
+        quote: "Come condividiamo la gloria delle nostre vittorie, così dobbiamo condividere il dolore delle nostre sconfitte.",
+        approcci: {dinamico:3, furtivo:2, astuto:1, sociale:2},
+        traits: ['Saggio', 'Robusto'],
+        hindrance: 'Vecchie Ferite',
+        languages: ['Arabo', 'Greco'],
+        gear: [
+          {name:'Bombe Fumogene', distintivo:true},
+          {name:'Pugnale', distintivo:true},
+          {name:'Lama Celata'},
+          {name:'Otre'},
+          {name:'Vesti da Maestro Assassino'},
+          {name:'Bastone da Combattimento'}
+        ]
+      },
+      {
+        name: 'Snips',
+        description: "Adepto della Confraternita Levantina.",
+        quote: "Nulla è reale, tutto è concesso.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Altruista', 'Tiratore Scelto'],
+        hindrance: 'Idealista',
+        languages: ['Arabo', 'Francese'],
+        gear: [
+          {name:'Balestra', distintivo:true},
+          {name:'Khanjar (Pugnale)', distintivo:true},
+          {name:'Sciabola'},
+          {name:'Coltelli da Lancio'},
+          {name:'Vesti da Adepto'},
+          {name:'Amuleto della Confraternita'}
+        ]
+      },
+      {
+        name: "L'Almasty",
+        description: "Assassino della Confraternita Mongola.",
+        quote: "Non possiamo sperare di combatterli, ma possiamo comunque sabotare i loro sforzi.",
+        approcci: {dinamico:2, furtivo:1, astuto:2, sociale:3},
+        traits: ['Elusivo', 'Sabotatore'],
+        hindrance: 'Vendetta',
+        languages: ['Arabo', 'Mongolo'],
+        gear: [
+          {name:'Arco e Frecce', distintivo:true},
+          {name:'Armatura di Pelliccia', distintivo:true},
+          {name:'Maschera Almasty'},
+          {name:'Spada'},
+          {name:'Pugnale'},
+          {name:'Batu (Cavallo)'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'rinascimento_italiano',
+    label: "Rinascimento Italiano",
+    witnesses: [
+      {
+        name: 'Ezio Auditore',
+        description: "Nobile fiorentino del Rinascimento e Maestro Assassino.",
+        quote: "Non temere l'oscurità, ma accoglila.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Rapido', 'Impavido'],
+        hindrance: 'Giustizia',
+        languages: ['Italiano'],
+        gear: [
+          {name:'Lame Doppie Celate', distintivo:true},
+          {name:'Pistola Celata', distintivo:true},
+          {name:'Spada'},
+          {name:'Cinquedea (Pugnale)'},
+          {name:'Bombe Fumogene'},
+          {name:'Coltelli da Lancio'}
+        ]
+      },
+      {
+        name: 'Leonardo da Vinci',
+        description: "Anatomista, scultore, cartografo, pittore, botanico, ingegnere, architetto e matematico italiano.",
+        quote: "Non mi accontento di catturare il mondo. Voglio cambiarlo.",
+        approcci: {dinamico:3, furtivo:2, astuto:1, sociale:2},
+        traits: ['Rispettato', 'Genio'],
+        hindrance: 'Curioso',
+        languages: ['Francese', 'Italiano', 'Latino'],
+        gear: [
+          {name:'Attrezzi da Ingegnere', distintivo:true},
+          {name:'Pistola Celata', distintivo:true},
+          {name:'Attrezzi da Disegno'},
+          {name:'Bombe Fumogene'},
+          {name:'Pugnale'},
+          {name:"Codex dell'Assassino"}
+        ]
+      },
+      {
+        name: 'La Volpe',
+        description: "Capo delle gilde dei ladri di Firenze e Roma, membro della Confraternita Italiana.",
+        quote: "Sono affari miei sapere tutto ciò che accade in questa città.",
+        approcci: {dinamico:3, furtivo:1, astuto:2, sociale:2},
+        traits: ['Elusivo', 'Ben Introdotto'],
+        hindrance: 'Diffidente',
+        languages: ['Italiano'],
+        gear: [
+          {name:'Coltello da Macellaio', distintivo:true},
+          {name:'Balestra', distintivo:true},
+          {name:'Spada'},
+          {name:'Grimaldelli'},
+          {name:'Corda'},
+          {name:'Coltelli da Lancio'}
+        ]
+      },
+      {
+        name: "Bartolomeo D'Alviano",
+        description: "Membro della Confraternita Italiana e capo dei mercenari veneziani e romani.",
+        quote: "La nobiltà nasce dal combattere fianco a fianco con i propri soldati.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Aggressivo', 'Forte'],
+        hindrance: 'Onore',
+        languages: ['Greco', 'Italiano', 'Latino'],
+        gear: [
+          {name:'Bianca (Spadone)', distintivo:true},
+          {name:'Armatura', distintivo:true},
+          {name:'Cinquedea (Pugnale)'},
+          {name:'Contratto Mercenario'},
+          {name:'Ascia'},
+          {name:'Bottiglia di Vino'}
+        ]
+      },
+      {
+        name: 'Rosa',
+        description: "Membro della Gilda dei Ladri veneziana, in seguito Madama della Rosa in Fiore e Maestro Assassino.",
+        quote: "Spero che tu prenda la peste, bastardo!",
+        approcci: {dinamico:3, furtivo:2, astuto:2, sociale:1},
+        traits: ['Robusta', 'Agile'],
+        hindrance: 'Sconsiderata',
+        languages: ['Italiano'],
+        gear: [
+          {name:'Coltello del Sultano', distintivo:true},
+          {name:'Grimaldelli', distintivo:true},
+          {name:'Coltelli da Lancio'},
+          {name:'Bombe Fumogene'},
+          {name:'Lama Celata'},
+          {name:'Kit da Travestimento'}
+        ]
+      },
+      {
+        name: 'Peste',
+        description: "Medico e amico della Confraternita degli Assassini.",
+        quote: "In dosi sufficientemente alte, ciò che serve da cura può diventare anche una forza letale.",
+        approcci: {dinamico:2, furtivo:2, astuto:1, sociale:3},
+        traits: ['Concentrato', 'Medico'],
+        hindrance: 'Vecchie Ferite',
+        languages: ['Francese', 'Greco', 'Italiano', 'Latino'],
+        gear: [
+          {name:'Vesti da Medico della Peste', distintivo:true},
+          {name:'Siringa', distintivo:true},
+          {name:'Fiale di Veleno'},
+          {name:'Bastone-Spada'},
+          {name:'Simbolo del Caduceo'},
+          {name:'Farmaci Curativi'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'dinastia_ming',
+    label: "Dinastia Ming",
+    witnesses: [
+      {
+        name: 'La Maschera',
+        description: "Famosa interprete dell'opera Dixi e Adepta della Confraternita Cinese.",
+        quote: "Recita bene il tuo ruolo; lì risiede tutto l'onore.",
+        approcci: {dinamico:1, furtivo:2, astuto:2, sociale:3},
+        traits: ['Scaltra', 'Sabotatrice'],
+        hindrance: 'Impulsiva',
+        languages: ['Cinese'],
+        gear: [
+          {name:'Lama Celata', distintivo:true},
+          {name:'Attrezzi da Travestimento', distintivo:true},
+          {name:'Maschera di Legno Intagliata'},
+          {name:'Rampino'},
+          {name:'Inchiostro e Pennello'},
+          {name:'Fiale di Veleno'}
+        ]
+      },
+      {
+        name: 'Shao Jun',
+        description: "Mentore della Confraternita Cinese degli Assassini ed ex concubina dell'Imperatore Zhengde.",
+        quote: "Finché non hai provato la sete di vendetta, non puoi conoscere la rabbia che alimenta.",
+        approcci: {dinamico:2, furtivo:2, astuto:2, sociale:2},
+        traits: ['Arte Marziale Wushu', 'Vigile'],
+        hindrance: 'Spietata',
+        languages: ['Cinese', 'Italiano', 'Giapponese'],
+        gear: [
+          {name:'Jian Cremisi (Spada)', distintivo:true},
+          {name:'Lama Celata sotto il Piede', distintivo:true},
+          {name:'Petardi'},
+          {name:'Dardi Sonori'},
+          {name:'Aghi da Lancio'},
+          {name:'Dardi con Corda'}
+        ]
+      },
+      {
+        name: 'Fenghuang',
+        description: "Ex generale dell'esercito cinese, ora ribelle unitasi alla causa della Confraternita.",
+        quote: "La vendetta non è mai una linea retta.",
+        approcci: {dinamico:2, furtivo:3, astuto:1, sociale:2},
+        traits: ['Scaltra', 'Veterana'],
+        hindrance: 'Vendetta',
+        languages: ['Cinese'],
+        gear: [
+          {name:'Armatura a Motivo di Montagna', distintivo:true},
+          {name:'Dao (Spada)', distintivo:true},
+          {name:'Huǒ Qiāng (Lancia a Polvere da Sparo)'},
+          {name:'Attrezzi da Scrittura'},
+          {name:'Baijiu (Liquore)'},
+          {name:'Nongxiang (Cavallo)'}
+        ]
+      },
+      {
+        name: 'La Tigre Accovacciata',
+        description: "Maestra di spada e capo di una compagnia di sicurezza privata.",
+        quote: "La vera affilatura non richiede sudore.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Saggia', 'Maestra di Spada'],
+        hindrance: 'Onore',
+        languages: ['Cinese', 'Giapponese', 'Portoghese'],
+        gear: [
+          {name:'Dao (Spada)', distintivo:true},
+          {name:'Fermaglio per Capelli', distintivo:true},
+          {name:'Ventaglio'},
+          {name:'Rampino'},
+          {name:'Triboli'},
+          {name:'Petardi'}
+        ]
+      },
+      {
+        name: 'Cacciatore di Wokou',
+        description: "Monaco guerriero errante e cacciatore di pirati.",
+        quote: "La libertà è l'unica condizione per la felicità.",
+        approcci: {dinamico:2, furtivo:2, astuto:3, sociale:1},
+        traits: ['Arte Marziale Wushu', 'Concentrato'],
+        hindrance: 'Idealista',
+        languages: ['Cinese', 'Giapponese'],
+        gear: [
+          {name:'Spada del Monaco (Arma in Asta)', distintivo:true},
+          {name:'Corona del Rosario', distintivo:true},
+          {name:'Bastone da Combattimento'},
+          {name:'Arco e Frecce'},
+          {name:'Pergamene'},
+          {name:'Doppie Spade'}
+        ]
+      },
+      {
+        name: 'La Spada della Luce del Sole',
+        description: "Ronin che lavora come mercenario.",
+        quote: "Una lama reclamerà il mio ultimo respiro. Il mio, o quello del mio nemico.",
+        approcci: {dinamico:1, furtivo:3, astuto:2, sociale:2},
+        traits: ['Samurai', 'Resiliente'],
+        hindrance: 'Redenzione',
+        languages: ['Cinese', 'Giapponese'],
+        gear: [
+          {name:'Spada di Famiglia', distintivo:true},
+          {name:'Arco Yumi e Frecce', distintivo:true},
+          {name:'Armatura da Samurai'},
+          {name:'Ventaglio Pieghevole'},
+          {name:'Wakizashi (Spada Corta)'},
+          {name:'Borraccia di Bambù'}
+        ]
+      }
+    ]
+  },
+  {
+    key: 'eta_oro_pirateria',
+    label: "Età d'Oro della Pirateria",
+    witnesses: [
+      {
+        name: 'Edward Kenway',
+        description: "Corsaro gallese divenuto pirata, membro delle Confraternite delle Indie Occidentali e Britannica.",
+        quote: "Eccomi qui... con ricchezze e una reputazione, e non mi sento più saggio di quando sono partito da casa.",
+        approcci: {dinamico:1, furtivo:2, astuto:3, sociale:2},
+        traits: ['Audace', 'Capitano'],
+        hindrance: 'Redenzione',
+        languages: ['Inglese'],
+        gear: [
+          {name:'Sciabole Doppie', distintivo:true},
+          {name:'Pistole Flintlock', distintivo:true},
+          {name:'Coltelli da Lancio'},
+          {name:'Lame Doppie Celate'},
+          {name:'Cerbottana'},
+          {name:'Bombe Fumogene'}
+        ]
+      },
+      {
+        name: 'Adewalé',
+        description: "Pirata e membro della Confraternita delle Indie Occidentali.",
+        quote: "Devo dedicare le mie energie a chi lotta per la libertà.",
+        approcci: {dinamico:1, furtivo:2, astuto:2, sociale:3},
+        traits: ['Saggio', 'Atletico'],
+        hindrance: 'Giustizia',
+        languages: ['Creolo di Trinidad', 'Inglese'],
+        gear: [
+          {name:'Machete', distintivo:true},
+          {name:'Trombone', distintivo:true},
+          {name:'Lama Celata'},
+          {name:'Pistola Flintlock'},
+          {name:'Petardi'},
+          {name:'Dardi con Corda'}
+        ]
+      },
+      {
+        name: 'Dakodonou',
+        description: "Membro della Confraternita di Saint-Domingue e praticante di voodoo haitiano.",
+        quote: "Alzati! Così posso ucciderti di nuovo.",
+        approcci: {dinamico:2, furtivo:2, astuto:1, sociale:3},
+        traits: ['Ben Introdotto', 'Spietato'],
+        hindrance: 'Superstizioso',
+        languages: ['Creolo Haitiano', 'Inglese', 'Francese'],
+        gear: [
+          {name:'Spezza-Anime (Ascia)', distintivo:true},
+          {name:'Daga', distintivo:true},
+          {name:'Rampini'},
+          {name:'Pittura di Guerra'},
+          {name:'Paraphernalia Voodoo'},
+          {name:'Bottiglia di Rum'}
+        ]
+      },
+      {
+        name: 'Mary Read',
+        description: "Una delle fondatrici della Repubblica dei Pirati di Nassau e membro della Confraternita delle Indie Occidentali.",
+        quote: "Seguiamo un credo, sì. Ma non ci ordina di agire o sottometterci - solo di essere saggi.",
+        approcci: {dinamico:3, furtivo:1, astuto:2, sociale:2},
+        traits: ['Affascinante', 'Astuta'],
+        hindrance: 'Idealista',
+        languages: ['Inglese', 'Spagnolo'],
+        gear: [
+          {name:'Lame Doppie Celate', distintivo:true},
+          {name:'Kit da Travestimento', distintivo:true},
+          {name:'Pistola'},
+          {name:'Sciabola'},
+          {name:'Bombe Fumogene'},
+          {name:'Grimaldelli'}
+        ]
+      },
+      {
+        name: 'Ah Tabai',
+        description: "Assassino Maya e Mentore della Confraternita delle Indie Occidentali.",
+        quote: "Il nostro obiettivo deve essere disperdere le nostre operazioni. Vivere e lavorare tra la gente che proteggiamo.",
+        approcci: {dinamico:2, furtivo:1, astuto:2, sociale:3},
+        traits: ['Risoluto', 'Veterano'],
+        hindrance: 'Irascibile',
+        languages: ['Inglese', 'Maya', 'Spagnolo'],
+        gear: [
+          {name:'Lame Doppie Celate', distintivo:true},
+          {name:'Cerbottana', distintivo:true},
+          {name:'Coltelli da Lancio'},
+          {name:'Spallaccio Metallico'},
+          {name:'Dardi Avvelenati'},
+          {name:'Lancia'}
+        ]
+      },
+      {
+        name: 'Jackie la Gazza',
+        description: "Pirata e amica della Confraternita delle Indie Occidentali.",
+        quote: "Se avessi combattuto come un uomo, non saresti stato ucciso come un topo.",
+        approcci: {dinamico:2, furtivo:2, astuto:3, sociale:1},
+        traits: ['Impavida', 'Pirata'],
+        hindrance: 'Impaziente',
+        languages: ['Inglese', 'Francese', 'Spagnolo'],
+        gear: [
+          {name:'Pistole Gemelle', distintivo:true},
+          {name:'Attrezzi per Tatuaggi', distintivo:true},
+          {name:'Astuccio Cosmetico'},
+          {name:'Coltello Nascosto'},
+          {name:'Bottiglia di Rum'},
+          {name:'Polvere da Sparo'}
         ]
       }
     ]
